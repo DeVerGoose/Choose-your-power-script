@@ -9,16 +9,21 @@ local Camera = workspace.CurrentCamera
 local UIS = game:GetService("UserInputService")
 local VIM = game:GetService("VirtualInputManager")
 local Entities = workspace:WaitForChild("Entities")
+local Debris = game:GetService("Debris")
 
 local AutoKillState = false
+local AimAssistState = false
+local AimAssistCD = false
 local WHColor = Color3.new(1, 0.388235, 0.388235)
+
+local States: Folder = Character:WaitForChild("States")
 
 -- // Gui \\ --
 local Gui = Instance.new("ScreenGui", Player.PlayerGui)
 Gui.ScreenInsets = Enum.ScreenInsets.CoreUISafeInsets
 Gui.IgnoreGuiInset = true
 Gui.ResetOnSpawn = false
-Gui.Name = "DeVerScript"
+Gui.Name = "CYS - De Ver"
 
 local ButtonTag = Instance.new("ImageButton", Gui)
 ButtonTag.Name = "ButtonTag"
@@ -312,6 +317,65 @@ AutoKillBackground.Size = UDim2.new(0.477136731, 0, 0.805000663, 0)
 AutoKillBackgroundUICorner.CornerRadius = UDim.new(1, 0)
 AutoKillBackgroundUICorner.Name = "AutoKillRespawnBackgroundUICorner"
 AutoKillBackgroundUICorner.Parent = AutoKillBackground
+
+local AimAssist = Instance.new("TextLabel")
+local AimAssistSwitchButton = Instance.new("TextButton")
+local AimAssistSwitchButtonUICorner = Instance.new("UICorner")
+local AimAssistUITextSizeConstraint = Instance.new("UITextSizeConstraint")
+local AimAssistBackground = Instance.new("Frame")
+local AimAssistBackgroundUICorner = Instance.new("UICorner")
+
+--Properties:
+
+AimAssist.Name = "AimAssist"
+AimAssist.Parent = Combat
+AimAssist.BackgroundColor3 = Color3.fromRGB(255, 255, 255)
+AimAssist.BackgroundTransparency = 1.000
+AimAssist.BorderColor3 = Color3.fromRGB(0, 0, 0)
+AimAssist.BorderSizePixel = 0
+AimAssist.Position = UDim2.new(0.041775059, 0, 0.425892621, 0)
+AimAssist.Size = UDim2.new(0.214784697, 0, 0.171117067, 0)
+AimAssist.ZIndex = 2
+AimAssist.Font = Enum.Font.Oswald
+AimAssist.Text = "Aim Assist"
+AimAssist.TextColor3 = Color3.fromRGB(139, 139, 139)
+AimAssist.TextScaled = true
+AimAssist.TextSize = 14.000
+AimAssist.TextWrapped = true
+AimAssist.TextXAlignment = Enum.TextXAlignment.Left
+
+AimAssistSwitchButton.Name = "AimAssistSwitchButton"
+AimAssistSwitchButton.Parent = AimAssist
+AimAssistSwitchButton.BackgroundColor3 = Color3.fromRGB(139, 139, 139)
+AimAssistSwitchButton.BorderColor3 = Color3.fromRGB(0, 0, 0)
+AimAssistSwitchButton.BorderSizePixel = 0
+AimAssistSwitchButton.Position = UDim2.new(1.22538996, 0, 0.19466123, 0)
+AimAssistSwitchButton.Size = UDim2.new(0.293512404, 0, 0.805339217, 0)
+AimAssistSwitchButton.ZIndex = 2
+AimAssistSwitchButton.Font = Enum.Font.SourceSans
+AimAssistSwitchButton.Text = ""
+AimAssistSwitchButton.TextColor3 = Color3.fromRGB(0, 0, 0)
+AimAssistSwitchButton.TextSize = 14.000
+
+AimAssistSwitchButtonUICorner.CornerRadius = UDim.new(1, 0)
+AimAssistSwitchButtonUICorner.Name = "AimAssistSwitchButtonUICorner"
+AimAssistSwitchButtonUICorner.Parent = AimAssistSwitchButton
+
+AimAssistUITextSizeConstraint.Name = "AimAssistUITextSizeConstraint"
+AimAssistUITextSizeConstraint.Parent = AimAssist
+AimAssistUITextSizeConstraint.MaxTextSize = 41
+
+AimAssistBackground.Name = "Background"
+AimAssistBackground.Parent = AimAssist
+AimAssistBackground.BackgroundColor3 = Color3.fromRGB(17, 17, 17)
+AimAssistBackground.BorderColor3 = Color3.fromRGB(0, 0, 0)
+AimAssistBackground.BorderSizePixel = 0
+AimAssistBackground.Position = UDim2.new(1.29799902, 0, 0.194999263, 0)
+AimAssistBackground.Size = UDim2.new(0.477136731, 0, 0.805000663, 0)
+
+AimAssistBackgroundUICorner.CornerRadius = UDim.new(1, 0)
+AimAssistBackgroundUICorner.Name = "AimAssistBackgroundUICorner"
+AimAssistBackgroundUICorner.Parent = AimAssistBackground
 
 --# Movement
 
@@ -708,6 +772,105 @@ local function hexToColor3(hex)
 	return nil
 end
 
+local Hitbox = {}
+
+function Hitbox.Create(Size, InstancePart, Offset, LifeTime)
+	local Part = Instance.new("Part")
+	Part.Size = Size or Vector3.new(7, 7, 7)
+
+	local BasePart = InstancePart or HumRP
+	Part.CFrame = BasePart.CFrame * (Offset or CFrame.new())
+
+	Part.Anchored = false
+	Part.Material = Enum.Material.ForceField
+	Part.Color = Color3.fromRGB(255, 42, 46)
+	Part.CanCollide = false
+	Part.CastShadow = false
+	Part.Parent = workspace
+
+	Debris:AddItem(Part, LifeTime or 0.1)
+
+	return Part
+end
+
+function Hitbox.OnTouched(HitboxPart, Callback)
+	local HitDebounce = {}
+
+	HitboxPart.Touched:Connect(function(Hit)
+		local EnemyCharacter = Hit:FindFirstAncestorOfClass("Model")
+		if not EnemyCharacter then return end
+
+		local EnemyHumanoid = EnemyCharacter:FindFirstChildOfClass("Humanoid")
+		if not EnemyHumanoid then return end
+
+		if EnemyCharacter == Character then return end
+
+		if HitDebounce[EnemyHumanoid] then return end
+		HitDebounce[EnemyHumanoid] = true
+
+		Callback(EnemyCharacter, EnemyHumanoid, Hit)
+
+		task.delay(0.2, function()
+			HitDebounce[EnemyHumanoid] = nil
+		end)
+	end)
+end
+
+UIS.InputBegan:Connect(function(Input, GameProcessed)
+	if GameProcessed then return end
+
+	if Input.UserInputType == Enum.UserInputType.MouseButton1 then
+		if not AimAssistState or AimAssistCD or Humanoid.Health < 0 or HumRP.Position.Y > 150 or States:FindFirstChild("Ragdoll") then return end
+
+		AimAssistCD = true
+
+		local HB = Hitbox.Create(Vector3.new(25, 7, 25), HumRP, CFrame.new(0, 0, -7.5))
+
+		Hitbox.OnTouched(HB, function(EnemyCharacter: Model, EnemyHumanoid: Humanoid)
+			local EnemyHRP = EnemyCharacter:FindFirstChild("HumanoidRootPart")
+			if not EnemyHRP then return end
+
+			if EnemyHumanoid.Health <= 0 then return end
+
+			local Attachment = Instance.new("Attachment")
+			Attachment.Parent = HumRP
+
+			local LV = Instance.new("LinearVelocity")
+			LV.Attachment0 = Attachment
+			LV.MaxForce = math.huge
+			LV.Parent = HumRP
+
+			local Connection
+			Connection = RNS.Heartbeat:Connect(function()
+				if not EnemyHRP or not EnemyHRP.Parent then
+					Connection:Disconnect()
+					return
+				end
+
+				local Direction = (EnemyHRP.Position - HumRP.Position)
+				local Distance = Direction.Magnitude
+
+				if Distance > 0 then
+					local Speed = math.clamp(Distance * 6, 10, 32.5)
+					local TargetVelocity = Direction.Unit * Speed
+
+					LV.VectorVelocity = LV.VectorVelocity:Lerp(TargetVelocity, 0.2)
+				end
+			end)
+
+			task.delay(0.2, function()
+				if Connection then Connection:Disconnect() end
+				LV:Destroy()
+				Attachment:Destroy()
+			end)
+		end)
+
+		task.delay(0.4, function()
+			AimAssistCD = false
+		end)
+	end
+end)
+
 WHTextBox:GetPropertyChangedSignal("Text"):Connect(function()
 	local color = hexToColor3(WHTextBox.Text)
 	if color then
@@ -747,7 +910,7 @@ for _, v in TopFrameFolder:GetChildren() do
 end
 
 RNS.Heartbeat:Connect(function()
-	
+
 	--[[
 	if game.ReplicatedStorage:FindFirstChild("Data") then
 		Element.Text = "Element: " .. game:GetService("ReplicatedStorage").Data[Player.UserId].Element.Value
@@ -838,11 +1001,22 @@ end)
 AutoKillSwitchButton.MouseButton1Click:Connect(function()
 	SwitcherSetup(AutoKillSwitchButton)
 	AutoKillState = not AutoKillState
-	
+
 	if AutoKillSwitchButton:GetAttribute("Switch") == true then
 		Notification("Notification", "Auto Kill", "Auto Kill ON")
 	else
 		Notification("Notification", "Auto Kill", "Auto Kill OFF")
+	end
+end)
+
+AimAssistSwitchButton.MouseButton1Click:Connect(function()
+	SwitcherSetup(AimAssistSwitchButton)
+	AimAssistState = not AimAssistState
+
+	if AimAssistSwitchButton:GetAttribute("Switch") == true then
+		Notification("Notification", "Aim Assist", "ON")
+	else
+		Notification("Notification", "Aim Assist", "OFF")
 	end
 end)
 
@@ -912,4 +1086,5 @@ Player.CharacterAdded:Connect(function(char)
 	Character = char
 	Humanoid = char:WaitForChild("Humanoid")
 	HumRP = char:WaitForChild("HumanoidRootPart")
+	States = char:WaitForChild("States")
 end)
