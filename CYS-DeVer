@@ -4,14 +4,16 @@ local Player = game:GetService("Players").LocalPlayer
 local PlayerGui = Player.PlayerGui
 local Character = Player.Character
 local HumRP = Character:WaitForChild("HumanoidRootPart")
-local Humanoid = Character:WaitForChild("Humanoid")
+local Humanoid: Humanoid = Character:WaitForChild("Humanoid")
 local Camera = workspace.CurrentCamera
 local UIS = game:GetService("UserInputService")
 local VIM = game:GetService("VirtualInputManager")
 local Entities = workspace:WaitForChild("Entities")
 local Debris = game:GetService("Debris")
+local PathfindingService = game:GetService("PathfindingService")
 
 local AutoKillState = false
+local AutoFarmState = false
 local AimAssistState = false
 local AimAssistCD = false
 local WHColor = Color3.new(1, 0.388235, 0.388235)
@@ -589,6 +591,65 @@ WHColorButtonUICorner.CornerRadius = UDim.new(0.300000012, 0)
 WHColorButtonUICorner.Name = "WHColorButtonUICorner"
 WHColorButtonUICorner.Parent = WHColorButton
 
+local AutoFarm = Instance.new("TextLabel")
+local AutoFarmSwitchButton = Instance.new("TextButton")
+local AutoFarmSwitchButtonUICorner = Instance.new("UICorner")
+local AutoFarmUITextSizeConstraint = Instance.new("UITextSizeConstraint")
+local AutoFarmBackground = Instance.new("Frame")
+local AutoFarmBackgroundUICorner = Instance.new("UICorner")
+
+--Properties:
+
+AutoFarm.Name = "AutoFarm"
+AutoFarm.Parent = Combat
+AutoFarm.BackgroundColor3 = Color3.fromRGB(255, 255, 255)
+AutoFarm.BackgroundTransparency = 1.000
+AutoFarm.BorderColor3 = Color3.fromRGB(0, 0, 0)
+AutoFarm.BorderSizePixel = 0
+AutoFarm.Position = UDim2.new(0.041775059, 0, 0.651628137, 0)
+AutoFarm.Size = UDim2.new(0.214784697, 0, 0.171117067, 0)
+AutoFarm.ZIndex = 2
+AutoFarm.Font = Enum.Font.Oswald
+AutoFarm.Text = "Auto Farm"
+AutoFarm.TextColor3 = Color3.fromRGB(139, 139, 139)
+AutoFarm.TextScaled = true
+AutoFarm.TextSize = 14.000
+AutoFarm.TextWrapped = true
+AutoFarm.TextXAlignment = Enum.TextXAlignment.Left
+
+AutoFarmSwitchButton.Name = "AutoFarmSwitchButton"
+AutoFarmSwitchButton.Parent = AutoFarm
+AutoFarmSwitchButton.BackgroundColor3 = Color3.fromRGB(139, 139, 139)
+AutoFarmSwitchButton.BorderColor3 = Color3.fromRGB(0, 0, 0)
+AutoFarmSwitchButton.BorderSizePixel = 0
+AutoFarmSwitchButton.Position = UDim2.new(1.22538996, 0, 0.19466123, 0)
+AutoFarmSwitchButton.Size = UDim2.new(0.293512404, 0, 0.805339217, 0)
+AutoFarmSwitchButton.ZIndex = 2
+AutoFarmSwitchButton.Font = Enum.Font.SourceSans
+AutoFarmSwitchButton.Text = ""
+AutoFarmSwitchButton.TextColor3 = Color3.fromRGB(0, 0, 0)
+AutoFarmSwitchButton.TextSize = 14.000
+
+AutoFarmSwitchButtonUICorner.CornerRadius = UDim.new(1, 0)
+AutoFarmSwitchButtonUICorner.Name = "AutoFarmSwitchButtonUICorner"
+AutoFarmSwitchButtonUICorner.Parent = AutoFarmSwitchButton
+
+AutoFarmUITextSizeConstraint.Name = "AutoFarmUITextSizeConstraint"
+AutoFarmUITextSizeConstraint.Parent = AutoFarm
+AutoFarmUITextSizeConstraint.MaxTextSize = 41
+
+AutoFarmBackground.Name = "Background"
+AutoFarmBackground.Parent = AutoFarm
+AutoFarmBackground.BackgroundColor3 = Color3.fromRGB(17, 17, 17)
+AutoFarmBackground.BorderColor3 = Color3.fromRGB(0, 0, 0)
+AutoFarmBackground.BorderSizePixel = 0
+AutoFarmBackground.Position = UDim2.new(1.29799902, 0, 0.194999263, 0)
+AutoFarmBackground.Size = UDim2.new(0.477136731, 0, 0.805000663, 0)
+
+AutoFarmBackgroundUICorner.CornerRadius = UDim.new(1, 0)
+AutoFarmBackgroundUICorner.Name = "AutoFarmBackgroundUICorner"
+AutoFarmBackgroundUICorner.Parent = AutoFarmBackground
+
 -- // Functions \\ --
 local CurrentPage = CombatButton
 
@@ -824,8 +885,7 @@ UIS.InputBegan:Connect(function(Input, GameProcessed)
 
 		AimAssistCD = true
 
-		local HB = Hitbox.Create(Vector3.new(10, 7, 25), HumRP, CFrame.new(0, 0, -7.5))
-
+		local HB = Hitbox.Create(Vector3.new(10, 7, 25), HumRP, CFrame.new(0, 0, -7.5), 0.05)
 		Hitbox.OnTouched(HB, function(EnemyCharacter: Model, EnemyHumanoid: Humanoid)
 			local EnemyHRP = EnemyCharacter:FindFirstChild("HumanoidRootPart")
 			if not EnemyHRP then return end
@@ -979,6 +1039,45 @@ local function GetBestTarget()
 	return BestTarget
 end
 
+local LockedTarget = nil
+local function GetNearestPlayer()
+	local Nearest = nil
+	local ShortestDistance = math.huge
+	local Aggressor = nil
+
+	local LastAttackerValue = Character:FindFirstChild("LastAttacker")
+	if LastAttackerValue and LastAttackerValue.Value then
+		local EnemyChar = LastAttackerValue.Value
+		if EnemyChar:FindFirstChild("HumanoidRootPart") and EnemyChar.Humanoid.Health > 0 then
+			Aggressor = EnemyChar.HumanoidRootPart
+		end
+	end
+
+	if Aggressor then
+		return Aggressor
+	end
+
+	for _, Plr in game:GetService("Players"):GetPlayers() do
+		if Plr ~= Player and Plr.Character then
+			local Char = Plr.Character
+			local HRP = Char:FindFirstChild("HumanoidRootPart")
+			local Hum = Char:FindFirstChild("Humanoid")
+
+			if HRP and Hum and Hum.Health > 0 then
+				local Dist = (HumRP.Position - HRP.Position).Magnitude
+
+				if Dist < ShortestDistance then
+					ShortestDistance = Dist
+					Nearest = HRP
+				end
+			end
+		end
+	end
+
+	return Nearest
+end
+
+-- Auto Kill
 task.spawn(function()
 	while task.wait(0.3) do
 		if AutoKillState and Humanoid.Health > 0 then
@@ -988,7 +1087,7 @@ task.spawn(function()
 			else
 				local TargetHRP: BasePart = GetBestTarget()
 
-				if TargetHRP then
+				if TargetHRP and TargetHRP:FindFirstChild("Humanoid") and TargetHRP:FindFirstChild("Humanoid").Health > 0 then
 					if TargetHRP.Position.Y < 150 and TargetHRP.Position.Y > -1 then
 						HumRP.CFrame = TargetHRP.CFrame * CFrame.new(0, -1, 5)
 						VIM:SendMouseButtonEvent(100, 200, 0, true, game, 0)
@@ -999,25 +1098,125 @@ task.spawn(function()
 	end
 end)
 
+-- Auto Farm
+local LastPathCompute = 0
+local FarmWaypoints = {}
+local CurrentWaypointIndex = 1
+
+task.spawn(function()
+	while task.wait() do
+		if AutoFarmState and Humanoid.Health > 0 then
+			if HumRP.Position.Y >= 150 then
+				Humanoid.WalkToPoint = Vector3.new(0, 758.75, 29.5)
+			else
+				local PotentialTarget = GetNearestPlayer()
+				
+				if not LockedTarget or not LockedTarget.Parent or LockedTarget.Parent.Humanoid.Health <= 0 or (PotentialTarget and PotentialTarget ~= LockedTarget) then
+					LockedTarget = PotentialTarget
+				end
+
+				local TargetHRP = LockedTarget
+
+				if TargetHRP then
+					local DistanceToTarget = (TargetHRP.Position - HumRP.Position).Magnitude
+
+					local RandomJump = math.random(1, 25)
+					if RandomJump == 1 then
+						Humanoid.Jump = true
+					end
+
+					if DistanceToTarget > 18 then
+						if tick() - LastPathCompute > 0.5 then
+							LastPathCompute = tick()
+							local CurrentPath = PathfindingService:CreatePath({
+								AgentRadius = 2,
+								AgentHeight = 5,
+								AgentCanJump = true
+							})
+							local IsComputationSuccessful = pcall(function()
+								CurrentPath:ComputeAsync(HumRP.Position, TargetHRP.Position)
+							end)
+							if IsComputationSuccessful and CurrentPath.Status == Enum.PathStatus.Success then
+								FarmWaypoints = CurrentPath:GetWaypoints()
+								CurrentWaypointIndex = 2
+							end
+						end
+
+						if FarmWaypoints and #FarmWaypoints >= CurrentWaypointIndex then
+							local TargetWaypoint = FarmWaypoints[CurrentWaypointIndex]
+							if TargetWaypoint.Action == Enum.PathWaypointAction.Jump then
+								Humanoid.Jump = true
+							end
+							Humanoid:MoveTo(TargetWaypoint.Position)
+							if (TargetWaypoint.Position - HumRP.Position).Magnitude < 4 then
+								CurrentWaypointIndex = CurrentWaypointIndex + 1
+							end
+						else
+							Humanoid:MoveTo(TargetHRP.Position)
+						end
+					else
+						Humanoid:MoveTo(TargetHRP.Position)
+						VIM:SendMouseButtonEvent(100, 200, 0, true, game, 0)
+					end
+				end
+			end
+		end
+	end
+end)
+
+RNS.RenderStepped:Connect(function(DeltaTime)
+	if AutoFarmState and LockedTarget and LockedTarget.Parent then
+		local TargetHumanoid = LockedTarget.Parent:FindFirstChild("Humanoid")
+
+		if TargetHumanoid and TargetHumanoid.Health > 0 then
+			local TargetCameraCFrame = CFrame.lookAt(Camera.CFrame.Position, LockedTarget.Position)
+			Camera.CFrame = Camera.CFrame:Lerp(TargetCameraCFrame, DeltaTime * 10)
+		end
+	end
+end)
+
 AutoKillSwitchButton.MouseButton1Click:Connect(function()
 	SwitcherSetup(AutoKillSwitchButton)
 	AutoKillState = not AutoKillState
 
-	if AutoKillSwitchButton:GetAttribute("Switch") == true then
-		Notification("Notification", "Auto Kill", "Auto Kill ON")
+	if AutoKillState then
+		if AutoFarmState then
+			AutoFarmState = false
+			SwitcherSetup(AutoFarmSwitchButton)
+		end
+
+		Notification("Notification", "Auto Kill", "Auto Kill: ON")
 	else
-		Notification("Notification", "Auto Kill", "Auto Kill OFF")
+		Notification("Notification", "Auto Kill", "Auto Kill: OFF")
 	end
 end)
+
+
+AutoFarmSwitchButton.MouseButton1Click:Connect(function()
+	SwitcherSetup(AutoFarmSwitchButton)
+	AutoFarmState = not AutoFarmState
+
+	if AutoFarmState then
+		if AutoKillState then
+			AutoKillState = false
+			SwitcherSetup(AutoKillSwitchButton)
+		end
+
+		Notification("Notification", "Auto Farm", "Auto Farm: ON")
+	else
+		Notification("Notification", "Auto Farm", "Auto Farm: OFF")
+	end
+end)
+
 
 AimAssistSwitchButton.MouseButton1Click:Connect(function()
 	SwitcherSetup(AimAssistSwitchButton)
 	AimAssistState = not AimAssistState
 
 	if AimAssistSwitchButton:GetAttribute("Switch") == true then
-		Notification("Notification", "Aim Assist", "ON")
+		Notification("Notification", "Aim Assist", "Aim Assist: ON")
 	else
-		Notification("Notification", "Aim Assist", "OFF")
+		Notification("Notification", "Aim Assist", "Aim Assist: OFF")
 	end
 end)
 
