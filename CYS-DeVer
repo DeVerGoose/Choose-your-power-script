@@ -990,8 +990,10 @@ task.spawn(function()
 				local TargetHRP: BasePart = GetBestTarget()
 
 				if TargetHRP then
-					HumRP.CFrame = TargetHRP.CFrame * CFrame.new(0, -1, 5)
-					VIM:SendMouseButtonEvent(100, 200, 0, true, game, 0)
+					if TargetHRP.Position.Y < 150 and TargetHRP.Position > -1 then
+						HumRP.CFrame = TargetHRP.CFrame * CFrame.new(0, -1, 5)
+						VIM:SendMouseButtonEvent(100, 200, 0, true, game, 0)
+					end
 				end
 			end
 		end	
