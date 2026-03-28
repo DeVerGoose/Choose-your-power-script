@@ -824,7 +824,7 @@ UIS.InputBegan:Connect(function(Input, GameProcessed)
 
 		AimAssistCD = true
 
-		local HB = Hitbox.Create(Vector3.new(25, 7, 25), HumRP, CFrame.new(0, 0, -7.5))
+		local HB = Hitbox.Create(Vector3.new(10, 7, 25), HumRP, CFrame.new(0, 0, -7.5))
 
 		Hitbox.OnTouched(HB, function(EnemyCharacter: Model, EnemyHumanoid: Humanoid)
 			local EnemyHRP = EnemyCharacter:FindFirstChild("HumanoidRootPart")
