@@ -409,7 +409,7 @@ TP.Position = UDim2.new(0.0417749472, 0, 0.0412469916, 0)
 TP.Size = UDim2.new(0.214784682, 0, 0.168430388, 0)
 TP.ZIndex = 2
 TP.Font = Enum.Font.Oswald
-TP.Text = "Teleport (R)"
+TP.Text = "Teleport (F)"
 TP.TextColor3 = Color3.fromRGB(139, 139, 139)
 TP.TextScaled = true
 TP.TextSize = 14.000
@@ -928,13 +928,12 @@ end)
 UIS.InputBegan:Connect(function(input, isProcessed)
 	if isProcessed then return end
 
-	if input.KeyCode == Enum.KeyCode.R then
+	if input.KeyCode == Enum.KeyCode.F then
 		if TPSwitchButton:GetAttribute("Switch") == true then
 			local targetPosition = Player:GetMouse().Hit.Position + Vector3.new(0, 3, 0)
 			HumRP.CFrame = CFrame.new(targetPosition)
 
 			UiNotificator:Play()
-			Notification("Notification", "Teleport", "Successfully teleported to the mouse position")
 		end
 	end
 end)
