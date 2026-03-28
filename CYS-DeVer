@@ -930,8 +930,10 @@ UIS.InputBegan:Connect(function(input, isProcessed)
 
 	if input.KeyCode == Enum.KeyCode.F then
 		if TPSwitchButton:GetAttribute("Switch") == true then
-			local targetPosition = Player:GetMouse().Hit.Position + Vector3.new(0, 3, 0)
-			HumRP.CFrame = CFrame.new(targetPosition)
+			if Player:GetMouse().Target == nil then return end
+			
+			local TargetPosition = Player:GetMouse().Hit.Position + Vector3.new(0, 3, 0)
+			HumRP.CFrame = CFrame.new(TargetPosition)
 
 			UiNotificator:Play()
 		end
@@ -989,7 +991,7 @@ task.spawn(function()
 				local TargetHRP: BasePart = GetBestTarget()
 
 				if TargetHRP then
-					if TargetHRP.Position.Y < 150 and TargetHRP.Position > -1 then
+					if TargetHRP.Position.Y < 150 and TargetHRP.Position.Y > -1 then
 						HumRP.CFrame = TargetHRP.CFrame * CFrame.new(0, -1, 5)
 						VIM:SendMouseButtonEvent(100, 200, 0, true, game, 0)
 					end
