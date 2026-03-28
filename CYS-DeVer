@@ -910,11 +910,9 @@ for _, v in TopFrameFolder:GetChildren() do
 end
 
 RNS.Heartbeat:Connect(function()
-
-	--[[
-	if game.ReplicatedStorage:FindFirstChild("Data") then
-		Element.Text = "Element: " .. game:GetService("ReplicatedStorage").Data[Player.UserId].Element.Value
-	end]]
+	if Player:GetAttribute("Aspect") then
+		PowerText.Text = "Power: " .. Player:GetAttribute("Aspect")
+	end
 
 	if WHSwitchButton:GetAttribute("Switch") == true then
 		for _, v in Entities:GetChildren() do
