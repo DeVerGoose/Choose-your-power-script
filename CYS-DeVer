@@ -1,0 +1,915 @@
+local TS = game:GetService("TweenService")
+local RNS = game:GetService("RunService")
+local Player = game:GetService("Players").LocalPlayer
+local PlayerGui = Player.PlayerGui
+local Character = Player.Character
+local HumRP = Character:WaitForChild("HumanoidRootPart")
+local Humanoid = Character:WaitForChild("Humanoid")
+local Camera = workspace.CurrentCamera
+local UIS = game:GetService("UserInputService")
+local VIM = game:GetService("VirtualInputManager")
+local Entities = workspace:WaitForChild("Entities")
+
+local AutoKillState = false
+local WHColor = Color3.new(1, 0.388235, 0.388235)
+
+-- // Gui \\ --
+local Gui = Instance.new("ScreenGui", Player.PlayerGui)
+Gui.ScreenInsets = Enum.ScreenInsets.CoreUISafeInsets
+Gui.IgnoreGuiInset = true
+Gui.ResetOnSpawn = false
+Gui.Name = "DeVerScript"
+
+local ButtonTag = Instance.new("ImageButton", Gui)
+ButtonTag.Name = "ButtonTag"
+ButtonTag.BackgroundColor3 = Color3.fromRGB(34, 34, 34)
+ButtonTag.BorderColor3 = Color3.fromRGB(0, 0, 0)
+ButtonTag.BorderSizePixel = 0
+ButtonTag.Size = UDim2.new(0.026, 0, 0.046, 0)
+ButtonTag.Image = "http://www.roblox.com/asset/?id=7059346373"
+ButtonTag.ImageColor3 = Color3.new(1, 0.305882, 0.305882)
+ButtonTag.Visible = false
+local ButtonTagUiRation = Instance.new("UIAspectRatioConstraint", ButtonTag)
+ButtonTagUiRation.AspectRatio = 1
+local ButtonTagUICorner = Instance.new("UICorner", ButtonTag)
+ButtonTagUICorner.CornerRadius = UDim.new(0, 13)
+local ButtonTagStroke = Instance.new("UIStroke", ButtonTag)
+ButtonTagStroke.Color = Color3.new(0, 0, 0)
+ButtonTagStroke.Thickness = 5
+ButtonTagStroke.Transparency = 0.7
+
+
+-- Notification List --
+local NotificationList = Instance.new("Frame")
+local NotificationListUIListLayout = Instance.new("UIListLayout")
+
+NotificationList.Name = "NotificationList"
+NotificationList.Parent = Gui
+NotificationList.BackgroundColor3 = Color3.fromRGB(255, 255, 255)
+NotificationList.BackgroundTransparency = 1.000
+NotificationList.BorderColor3 = Color3.fromRGB(0, 0, 0)
+NotificationList.BorderSizePixel = 0
+NotificationList.Position = UDim2.new(0, 0, 0.164969206, 0)
+NotificationList.Size = UDim2.new(0, 365, 0, 556)
+
+NotificationListUIListLayout.Name = "NotificationListUIListLayout"
+NotificationListUIListLayout.Parent = NotificationList
+NotificationListUIListLayout.HorizontalAlignment = Enum.HorizontalAlignment.Center
+NotificationListUIListLayout.SortOrder = Enum.SortOrder.LayoutOrder
+NotificationListUIListLayout.Padding = UDim.new(0, 10)
+
+
+-- Background --
+local Background = Instance.new("Frame", Gui)
+Background.Size = UDim2.new(0.277, 0, 0.282, 0)
+Background.Position = UDim2.new(0.605, 0, 0.082, 0)
+Background.BackgroundColor3 = Color3.new(0.113725, 0.113725, 0.113725)
+Background.ClipsDescendants = true
+Instance.new("UIDragDetector", Background)
+
+local UiClick = Instance.new("Sound", Background)
+UiClick.SoundId = "rbxassetid://87437544236708"
+UiClick.Volume = 0.7
+
+local UiOn = Instance.new("Sound", Background)
+UiOn.SoundId = "rbxassetid://121348992695732"
+UiOn.Volume = 0.6
+
+local UiOff = Instance.new("Sound", Background)
+UiOff.SoundId = "rbxassetid://121348992695732"
+UiOff.Volume = 0.6
+UiOff.PlaybackSpeed = 0.7
+
+local UiClose = Instance.new("Sound", Background)
+UiClose.SoundId = "rbxassetid://7309103451"
+UiClose.Volume = 0.6
+UiClose.PlaybackSpeed = 0.7
+
+local UiOpen = Instance.new("Sound", Background)
+UiOpen.SoundId = "rbxassetid://7309103451"
+UiOpen.Volume = 0.6
+UiOpen.PlaybackSpeed = 1
+
+local UiNotificator = Instance.new("Sound", Background)
+UiNotificator.SoundId = "rbxassetid://17208372272"
+UiNotificator.Volume = 0.6
+
+local PagesFolder = Instance.new("Folder", Background)
+PagesFolder.Name = "Pages"
+
+local TopFrameFolder = Instance.new("Folder", Background)
+TopFrameFolder.Name = "TopFrame"
+
+local BackgroundUiRatio = Instance.new("UIAspectRatioConstraint", Background)
+BackgroundUiRatio.AspectRatio = 1.741
+
+local BackgroundCorner = Instance.new("UICorner", Background)
+BackgroundCorner.CornerRadius = UDim.new(0, 8)
+
+local BackgroundStroke = Instance.new("UIStroke", Background)
+BackgroundStroke.Color = Color3.new(0, 0, 0)
+BackgroundStroke.Thickness = 5
+BackgroundStroke.Transparency = 0.7
+
+local BackgroundLine = Instance.new("Frame", Background)
+BackgroundLine.Size = UDim2.new(1, 0, 0.011, 0)
+BackgroundLine.Position = UDim2.new(0, 0, 0.192, 0)
+BackgroundLine.BackgroundColor3 = Color3.new(0.0823529, 0.0823529, 0.0823529)
+BackgroundLine.BorderSizePixel = 0
+BackgroundLine.Name = "Line"
+
+-- Top Frame --
+local NameTag = Instance.new("TextLabel", TopFrameFolder)
+NameTag.Size = UDim2.new(0.141, 0, 0.128, 0)
+NameTag.Position = UDim2.new(0.011, 0, 0.029, 0)
+NameTag.TextColor3 = Color3.new(1, 1, 1)
+NameTag.Font = Enum.Font.SourceSans
+NameTag.TextScaled = true
+NameTag.TextWrapped = true
+NameTag.BackgroundTransparency = 1
+NameTag.Text = "DeVer"
+NameTag.Name = "NameTag"
+local NameTagUiRatio = Instance.new("UIAspectRatioConstraint", NameTag)
+NameTagUiRatio.AspectRatio = 1.923
+
+local ConnectTag = Instance.new("TextLabel", TopFrameFolder)
+ConnectTag.Size = UDim2.new(0.32, 0, 0.079, 0)
+ConnectTag.Position = UDim2.new(0.011, 0, 0.917, 0)
+ConnectTag.TextColor3 = Color3.new(1, 1, 1)
+ConnectTag.Font = Enum.Font.SourceSans
+ConnectTag.TextScaled = true
+ConnectTag.TextWrapped = true
+ConnectTag.BackgroundTransparency = 1
+ConnectTag.ZIndex = 2
+ConnectTag.TextXAlignment = Enum.TextXAlignment.Left
+ConnectTag.Text = "By: de__ver (Discord)"
+ConnectTag.Name = "ConnectTag"
+local ConnectTagUiRatio = Instance.new("UIAspectRatioConstraint", ConnectTag)
+ConnectTagUiRatio.AspectRatio = 7.083
+
+local CloseButton = Instance.new("TextButton", TopFrameFolder)
+CloseButton.Size = UDim2.new(0.066, 0, 0.115, 0)
+CloseButton.Position = UDim2.new(0.902, 0, 0.045, 0)
+CloseButton.TextColor3 = Color3.new(1, 0.254902, 0.254902)
+CloseButton.Font = Enum.Font.Michroma
+CloseButton.TextScaled = true
+CloseButton.TextWrapped = true
+CloseButton.BackgroundTransparency = 1
+CloseButton.Rotation = 90
+CloseButton.ZIndex = 2
+CloseButton.Name = "Close"
+CloseButton.Text = "X"
+local CloseButtonUiRatio = Instance.new("UIAspectRatioConstraint", CloseButton)
+CloseButtonUiRatio.AspectRatio = 1
+local CloseButtonUITextSize = Instance.new("UITextSizeConstraint", CloseButton)
+CloseButtonUITextSize.MaxTextSize = 35
+CloseButtonUITextSize.MinTextSize = 1
+
+local CombatButton = Instance.new("TextButton", TopFrameFolder)
+CombatButton.Size = UDim2.new(0.194, 0, 0.098, 0)
+CombatButton.Position = UDim2.new(0.183, 0, 0.042, 0)
+CombatButton.TextColor3 = Color3.new(1, 1, 1)
+CombatButton.Font = Enum.Font.Roboto
+CombatButton.TextScaled = true
+CombatButton.TextWrapped = true
+CombatButton.TextSize = 28
+CombatButton.BackgroundTransparency = 1
+CombatButton.ZIndex = 2
+CombatButton.Name = "Combat"
+CombatButton.Text = "Combat"
+local CombatButtonUiRatio = Instance.new("UIAspectRatioConstraint", CombatButton)
+CombatButtonUiRatio.AspectRatio = 3.433
+local CombatButtonUITextSize = Instance.new("UITextSizeConstraint", CombatButton)
+CombatButtonUITextSize.MaxTextSize = 28
+CombatButtonUITextSize.MinTextSize = 1
+
+local MovementButton = Instance.new("TextButton", TopFrameFolder)
+MovementButton.Size = UDim2.new(0.237, 0, 0.098, 0)
+MovementButton.Position = UDim2.new(0.402, 0, 0.042, 0)
+MovementButton.TextColor3 = Color3.new(0.6, 0.6, 0.6)
+MovementButton.Font = Enum.Font.Roboto
+MovementButton.TextScaled = true
+MovementButton.TextWrapped = true
+MovementButton.TextSize = 28
+MovementButton.BackgroundTransparency = 1
+MovementButton.ZIndex = 2
+MovementButton.Name = "Movement"
+MovementButton.Text = "Movement"
+local MovementButtonUiRatio = Instance.new("UIAspectRatioConstraint", MovementButton)
+MovementButtonUiRatio.AspectRatio = 4.2
+local MovementButtonUITextSize = Instance.new("UITextSizeConstraint", MovementButton)
+MovementButtonUITextSize.MaxTextSize = 28
+MovementButtonUITextSize.MinTextSize = 1
+
+local VisualsButton = Instance.new("TextButton", TopFrameFolder)
+VisualsButton.Size = UDim2.new(0.183, 0, 0.098, 0)
+VisualsButton.Position = UDim2.new(0.663, 0, 0.042, 0)
+VisualsButton.TextColor3 = Color3.new(0.6, 0.6, 0.6)
+VisualsButton.Font = Enum.Font.Roboto
+VisualsButton.TextScaled = true
+VisualsButton.TextWrapped = true
+VisualsButton.TextSize = 28
+VisualsButton.BackgroundTransparency = 1
+VisualsButton.ZIndex = 2
+VisualsButton.Name = "Visuals"
+VisualsButton.Text = "Visuals"
+local VisualsButtonUiRatio = Instance.new("UIAspectRatioConstraint", VisualsButton)
+VisualsButtonUiRatio.AspectRatio = 3.233
+local VisualsButtonUITextSize = Instance.new("UITextSizeConstraint", VisualsButton)
+VisualsButtonUITextSize.MaxTextSize = 28
+VisualsButtonUITextSize.MinTextSize = 1
+
+local SelectFrame = Instance.new("Frame", TopFrameFolder)
+SelectFrame.Size = UDim2.new(0.194, 0, 0.098, 0)
+SelectFrame.Position = UDim2.new(0.183, 0, 0.042, 0)
+SelectFrame.BackgroundColor3 = Color3.new(1, 0.305882, 0.305882)
+local SelectFrameCorner = Instance.new("UICorner", SelectFrame)
+SelectFrameCorner.CornerRadius = UDim.new(0, 8)
+
+-- Pages --
+
+-- #Combat
+local Combat = Instance.new("Frame", PagesFolder)
+Combat.Size = UDim2.new(0.989, 0, 0.8, 0)
+Combat.Position = UDim2.new(0.011, 0, 0.2, 0)
+Combat.BackgroundTransparency = 1
+Combat.Name = "Combat"
+Combat.ClipsDescendants = true
+
+local PowerText = Instance.new("TextLabel")
+PowerText.Name = "PowerText"
+PowerText.Parent = Combat
+PowerText.BackgroundColor3 = Color3.fromRGB(255, 255, 255)
+PowerText.BackgroundTransparency = 1.000
+PowerText.BorderColor3 = Color3.fromRGB(0, 0, 0)
+PowerText.BorderSizePixel = 0
+PowerText.Position = UDim2.new(0.0170133468, 0, 0.0293719191, 0)
+PowerText.Size = UDim2.new(0.352713436, 0, 0.145914599, 0)
+PowerText.ZIndex = 2
+PowerText.Font = Enum.Font.Oswald
+PowerText.Text = "Power: Quickstep"
+PowerText.TextColor3 = Color3.fromRGB(255, 255, 255)
+PowerText.TextScaled = true
+PowerText.TextSize = 14.000
+PowerText.TextWrapped = true
+PowerText.TextXAlignment = Enum.TextXAlignment.Left
+
+local AutoKill = Instance.new("TextLabel")
+local AutoKillSwitchButton = Instance.new("TextButton")
+local AutoKillSwitchButtonUICorner = Instance.new("UICorner")
+local AutoKillUITextSizeConstraint = Instance.new("UITextSizeConstraint")
+local AutoKillBackground = Instance.new("Frame")
+local AutoKillBackgroundUICorner = Instance.new("UICorner")
+
+--Properties:
+
+AutoKill.Name = "AutoKill"
+AutoKill.Parent = Combat
+AutoKill.BackgroundColor3 = Color3.fromRGB(255, 255, 255)
+AutoKill.BackgroundTransparency = 1.000
+AutoKill.BorderColor3 = Color3.fromRGB(0, 0, 0)
+AutoKill.BorderSizePixel = 0
+AutoKill.Position = UDim2.new(0.0417749472, 0, 0.212469916, 0)
+AutoKill.Size = UDim2.new(0.214784697, 0, 0.171117067, 0)
+AutoKill.ZIndex = 2
+AutoKill.Font = Enum.Font.Oswald
+AutoKill.Text = "Auto Kill"
+AutoKill.TextColor3 = Color3.fromRGB(139, 139, 139)
+AutoKill.TextScaled = true
+AutoKill.TextSize = 14.000
+AutoKill.TextWrapped = true
+AutoKill.TextXAlignment = Enum.TextXAlignment.Left
+
+AutoKillSwitchButton.Name = "AutoKillSwitchButton"
+AutoKillSwitchButton.Parent = AutoKill
+AutoKillSwitchButton.BackgroundColor3 = Color3.fromRGB(139, 139, 139)
+AutoKillSwitchButton.BorderColor3 = Color3.fromRGB(0, 0, 0)
+AutoKillSwitchButton.BorderSizePixel = 0
+AutoKillSwitchButton.Position = UDim2.new(1.22538996, 0, 0.19466123, 0)
+AutoKillSwitchButton.Size = UDim2.new(0.293512404, 0, 0.805339217, 0)
+AutoKillSwitchButton.ZIndex = 2
+AutoKillSwitchButton.Font = Enum.Font.SourceSans
+AutoKillSwitchButton.Text = ""
+AutoKillSwitchButton.TextColor3 = Color3.fromRGB(0, 0, 0)
+AutoKillSwitchButton.TextSize = 14.000
+
+AutoKillSwitchButtonUICorner.CornerRadius = UDim.new(1, 0)
+AutoKillSwitchButtonUICorner.Name = "AutoKillSwitchButtonUICorner"
+AutoKillSwitchButtonUICorner.Parent = AutoKillSwitchButton
+
+AutoKillUITextSizeConstraint.Name = "AutoKillUITextSizeConstraint"
+AutoKillUITextSizeConstraint.Parent = AutoKill
+AutoKillUITextSizeConstraint.MaxTextSize = 41
+
+AutoKillBackground.Name = "Background"
+AutoKillBackground.Parent = AutoKill
+AutoKillBackground.BackgroundColor3 = Color3.fromRGB(17, 17, 17)
+AutoKillBackground.BorderColor3 = Color3.fromRGB(0, 0, 0)
+AutoKillBackground.BorderSizePixel = 0
+AutoKillBackground.Position = UDim2.new(1.29799902, 0, 0.194999263, 0)
+AutoKillBackground.Size = UDim2.new(0.477136731, 0, 0.805000663, 0)
+
+AutoKillBackgroundUICorner.CornerRadius = UDim.new(1, 0)
+AutoKillBackgroundUICorner.Name = "AutoKillRespawnBackgroundUICorner"
+AutoKillBackgroundUICorner.Parent = AutoKillBackground
+
+--# Movement
+
+local Movement = Instance.new("Frame")
+
+Movement.Name = "Movement"
+Movement.Parent = PagesFolder
+Movement.BackgroundColor3 = Color3.fromRGB(0, 0, 0)
+Movement.BackgroundTransparency = 1.000
+Movement.BorderColor3 = Color3.fromRGB(0, 0, 0)
+Movement.BorderSizePixel = 0
+Movement.Position = UDim2.new(0.011299435, 0, 0.200000003, 0)
+Movement.Size = UDim2.new(0.988700569, 0, 0.800000012, 0)
+Movement.Visible = false
+Movement.ClipsDescendants = true
+
+local TP = Instance.new("TextLabel")
+local TPSwitchButton = Instance.new("TextButton")
+local TPSwitchButtonUICorner = Instance.new("UICorner")
+local TPUITextSizeConstraint = Instance.new("UITextSizeConstraint")
+local TPBackground = Instance.new("Frame")
+local TPBackgroundUICorner = Instance.new("UICorner")
+
+TP.Name = "TP"
+TP.Parent = Movement
+TP.BackgroundColor3 = Color3.fromRGB(255, 255, 255)
+TP.BackgroundTransparency = 1.000
+TP.BorderColor3 = Color3.fromRGB(0, 0, 0)
+TP.BorderSizePixel = 0
+TP.Position = UDim2.new(0.0417749472, 0, 0.0412469916, 0)
+TP.Size = UDim2.new(0.214784682, 0, 0.168430388, 0)
+TP.ZIndex = 2
+TP.Font = Enum.Font.Oswald
+TP.Text = "Teleport (R)"
+TP.TextColor3 = Color3.fromRGB(139, 139, 139)
+TP.TextScaled = true
+TP.TextSize = 14.000
+TP.TextWrapped = true
+TP.TextXAlignment = Enum.TextXAlignment.Left
+
+TPSwitchButton.Name = "SwitchButton"
+TPSwitchButton.Parent = TP
+TPSwitchButton.BackgroundColor3 = Color3.fromRGB(139, 139, 139)
+TPSwitchButton.BorderColor3 = Color3.fromRGB(0, 0, 0)
+TPSwitchButton.BorderSizePixel = 0
+TPSwitchButton.Position = UDim2.new(1.22538996, 0, 0.19466123, 0)
+TPSwitchButton.Size = UDim2.new(0.293512404, 0, 0.805339217, 0)
+TPSwitchButton.ZIndex = 2
+TPSwitchButton.Font = Enum.Font.SourceSans
+TPSwitchButton.Text = ""
+TPSwitchButton.TextColor3 = Color3.fromRGB(0, 0, 0)
+TPSwitchButton.TextSize = 14.000
+TPSwitchButton:SetAttribute("Switch", false)
+
+TPSwitchButtonUICorner.CornerRadius = UDim.new(1, 0)
+TPSwitchButtonUICorner.Name = "TPSwitchButtonUICorner"
+TPSwitchButtonUICorner.Parent = TPSwitchButton
+
+TPUITextSizeConstraint.Name = "TPUITextSizeConstraint"
+TPUITextSizeConstraint.Parent = TP
+TPUITextSizeConstraint.MaxTextSize = 41
+
+TPBackground.Name = "Background"
+TPBackground.Parent = TP
+TPBackground.BackgroundColor3 = Color3.fromRGB(17, 17, 17)
+TPBackground.BorderColor3 = Color3.fromRGB(0, 0, 0)
+TPBackground.BorderSizePixel = 0
+TPBackground.Position = UDim2.new(1.29799902, 0, 0.194999263, 0)
+TPBackground.Size = UDim2.new(0.477136731, 0, 0.805000663, 0)
+
+TPBackgroundUICorner.CornerRadius = UDim.new(1, 0)
+TPBackgroundUICorner.Name = "TPBackgroundUICorner"
+TPBackgroundUICorner.Parent = TPBackground
+
+--# Visuals
+
+local Visuals = Instance.new("Frame")
+local WallHack = Instance.new("TextLabel")
+local WHSwitchButton = Instance.new("TextButton")
+local WHSwitchButtonUICorner = Instance.new("UICorner")
+local WHUITextSizeConstraint = Instance.new("UITextSizeConstraint")
+local WHBackground = Instance.new("Frame")
+local WHBackgroundUICorner = Instance.new("UICorner")
+
+Visuals.Name = "Visuals"
+Visuals.Parent = PagesFolder
+Visuals.BackgroundColor3 = Color3.fromRGB(0, 0, 0)
+Visuals.BackgroundTransparency = 1.000
+Visuals.BorderColor3 = Color3.fromRGB(0, 0, 0)
+Visuals.BorderSizePixel = 0
+Visuals.Position = UDim2.new(0.011299435, 0, 0.200000003, 0)
+Visuals.Size = UDim2.new(0.988700569, 0, 0.800000012, 0)
+Visuals.Visible = false
+Visuals.ClipsDescendants = true
+
+WallHack.Name = "WallHack"
+WallHack.Parent = Visuals
+WallHack.BackgroundColor3 = Color3.fromRGB(255, 255, 255)
+WallHack.BackgroundTransparency = 1.000
+WallHack.BorderColor3 = Color3.fromRGB(0, 0, 0)
+WallHack.BorderSizePixel = 0
+WallHack.Position = UDim2.new(0.0417749472, 0, 0.0412469916, 0)
+WallHack.Size = UDim2.new(0.214784682, 0, 0.168430388, 0)
+WallHack.ZIndex = 2
+WallHack.Font = Enum.Font.Oswald
+WallHack.Text = "Wall Hack"
+WallHack.TextColor3 = Color3.fromRGB(139, 139, 139)
+WallHack.TextScaled = true
+WallHack.TextSize = 14.000
+WallHack.TextWrapped = true
+WallHack.TextXAlignment = Enum.TextXAlignment.Left
+
+WHSwitchButton.Name = "WHSwitchButton"
+WHSwitchButton.Parent = WallHack
+WHSwitchButton.BackgroundColor3 = Color3.fromRGB(139, 139, 139)
+WHSwitchButton.BorderColor3 = Color3.fromRGB(0, 0, 0)
+WHSwitchButton.BorderSizePixel = 0
+WHSwitchButton.Position = UDim2.new(1.22538996, 0, 0.19466123, 0)
+WHSwitchButton.Size = UDim2.new(0.293512404, 0, 0.805339217, 0)
+WHSwitchButton.ZIndex = 2
+WHSwitchButton.Font = Enum.Font.SourceSans
+WHSwitchButton.Text = ""
+WHSwitchButton.TextColor3 = Color3.fromRGB(0, 0, 0)
+WHSwitchButton.TextSize = 14.000
+
+WHSwitchButtonUICorner.CornerRadius = UDim.new(1, 0)
+WHSwitchButtonUICorner.Name = "WHSwitchButtonUICorner"
+WHSwitchButtonUICorner.Parent = WHSwitchButton
+
+WHUITextSizeConstraint.Name = "WHUITextSizeConstraint"
+WHUITextSizeConstraint.Parent = WallHack
+WHUITextSizeConstraint.MaxTextSize = 41
+
+WHBackground.Name = "Background"
+WHBackground.Parent = WallHack
+WHBackground.BackgroundColor3 = Color3.fromRGB(17, 17, 17)
+WHBackground.BorderColor3 = Color3.fromRGB(0, 0, 0)
+WHBackground.BorderSizePixel = 0
+WHBackground.Position = UDim2.new(1.29799902, 0, 0.194999263, 0)
+WHBackground.Size = UDim2.new(0.477136731, 0, 0.805000663, 0)
+
+WHBackgroundUICorner.CornerRadius = UDim.new(1, 0)
+WHBackgroundUICorner.Name = "WHBackgroundUICorner"
+WHBackgroundUICorner.Parent = WHBackground
+
+local WHColorChooseFrame = Instance.new("Frame")
+local WHTextBox = Instance.new("TextBox")
+local WHPredictColor = Instance.new("Frame")
+local CCFUIStroke = Instance.new("UIStroke")
+
+CCFUIStroke.Thickness = 5
+CCFUIStroke.Transparency = 0.7
+CCFUIStroke.Color = Color3.new(0, 0, 0)
+CCFUIStroke.Parent = WHColorChooseFrame
+
+WHColorChooseFrame.Name = "WHColorChooseFrame"
+WHColorChooseFrame.Parent = WallHack
+WHColorChooseFrame.BackgroundColor3 = Color3.fromRGB(0, 0, 0)
+WHColorChooseFrame.BackgroundTransparency = 0.100
+WHColorChooseFrame.BorderColor3 = Color3.fromRGB(0, 0, 0)
+WHColorChooseFrame.BorderSizePixel = 0
+WHColorChooseFrame.Position = UDim2.new(2.04967833, 0, 0.60166508, 0)
+WHColorChooseFrame.Size = UDim2.new(0.931165099, 0, 1.09496999, 0)
+WHColorChooseFrame.ZIndex = 3
+WHColorChooseFrame.Visible = false
+
+WHTextBox.Name = "WHTextBox"
+WHTextBox.Parent = WHColorChooseFrame
+WHTextBox.BackgroundColor3 = Color3.fromRGB(15, 15, 15)
+WHTextBox.BackgroundTransparency = 1.000
+WHTextBox.BorderColor3 = Color3.fromRGB(0, 0, 0)
+WHTextBox.BorderSizePixel = 0
+WHTextBox.Size = UDim2.new(1, 0, 0.899999976, 0)
+WHTextBox.Font = Enum.Font.Roboto
+WHTextBox.PlaceholderColor3 = Color3.fromRGB(39, 39, 39)
+WHTextBox.PlaceholderText = "#ff6363"
+WHTextBox.Text = ""
+WHTextBox.TextColor3 = Color3.fromRGB(217, 217, 217)
+WHTextBox.TextScaled = true
+WHTextBox.TextSize = 14.000
+WHTextBox.TextWrapped = true
+WHTextBox.ZIndex = 4
+
+WHPredictColor.Name = "WHPredictColor"
+WHPredictColor.Parent = WHColorChooseFrame
+WHPredictColor.BackgroundColor3 = Color3.fromRGB(255, 99, 99)
+WHPredictColor.BorderColor3 = Color3.fromRGB(0, 0, 0)
+WHPredictColor.BorderSizePixel = 0
+WHPredictColor.Position = UDim2.new(0, 0, 0.899999976, 0)
+WHPredictColor.Size = UDim2.new(1, 0, 0.100000001, 0)
+WHPredictColor.ZIndex = 4
+
+local WHColorButton = Instance.new("TextButton")
+local WHColorButtonUICorner = Instance.new("UICorner")
+
+WHColorButton.Name = "WHColorButton"
+WHColorButton.Parent = WallHack
+WHColorButton.BackgroundColor3 = Color3.fromRGB(255, 99, 99)
+WHColorButton.BorderColor3 = Color3.fromRGB(0, 0, 0)
+WHColorButton.BorderSizePixel = 0
+WHColorButton.Position = UDim2.new(1.89937615, 0, 0.194661334, 0)
+WHColorButton.Size = UDim2.new(0.293512404, 0, 0.805339217, 0)
+WHColorButton.ZIndex = 2
+WHColorButton.Font = Enum.Font.SourceSans
+WHColorButton.Text = ""
+WHColorButton.TextColor3 = Color3.fromRGB(0, 0, 0)
+WHColorButton.TextSize = 14.000
+WHColorButton:SetAttribute("Active", false)
+
+WHColorButtonUICorner.CornerRadius = UDim.new(0.300000012, 0)
+WHColorButtonUICorner.Name = "WHColorButtonUICorner"
+WHColorButtonUICorner.Parent = WHColorButton
+
+-- // Functions \\ --
+local CurrentPage = CombatButton
+
+local function Notification(Title, SubTitle, Text)
+	local Notification = Instance.new("Frame")
+	local NotificationTitle = Instance.new("TextLabel")
+	local UITextSizeConstraint = Instance.new("UITextSizeConstraint")
+	local NotificationSubTitle = Instance.new("TextLabel")
+	local UITextSizeConstraint_2 = Instance.new("UITextSizeConstraint")
+	local NotificationText = Instance.new("TextLabel")
+	local UITextSizeConstraint_3 = Instance.new("UITextSizeConstraint")
+
+	Notification.Name = "Notification"
+	Notification.Parent = NotificationList
+	Notification.BackgroundColor3 = Color3.fromRGB(11, 11, 11)
+	Notification.BackgroundTransparency = 0.300
+	Notification.BorderColor3 = Color3.fromRGB(0, 0, 0)
+	Notification.BorderSizePixel = 0
+	Notification.Position = UDim2.new(0, 0, 0.327338129, 0)
+	Notification.Size = UDim2.new(1, 0, 0, 0)
+	TS:Create(Notification, TweenInfo.new(0.2, Enum.EasingStyle.Quad, Enum.EasingDirection.Out), {Size = UDim2.new(1, 0, 0.233812943, 0)}):Play()
+
+	NotificationTitle.Name = "NotificationTitle"
+	NotificationTitle.Parent = Notification
+	NotificationTitle.BackgroundColor3 = Color3.fromRGB(0, 0, 0)
+	NotificationTitle.BackgroundTransparency = 0.700
+	NotificationTitle.BorderColor3 = Color3.fromRGB(0, 0, 0)
+	NotificationTitle.BorderSizePixel = 0
+	NotificationTitle.Size = UDim2.new(1, 0, 0.238461539, 0)
+	NotificationTitle.Font = Enum.Font.Roboto
+	NotificationTitle.Text = Title
+	NotificationTitle.TextColor3 = Color3.fromRGB(255, 255, 255)
+	NotificationTitle.TextScaled = true
+	NotificationTitle.TextSize = 14.000
+	NotificationTitle.TextWrapped = true
+
+	UITextSizeConstraint.Parent = NotificationTitle
+	UITextSizeConstraint.MaxTextSize = 31
+
+	NotificationSubTitle.Name = "NotificationSubTitle"
+	NotificationSubTitle.Parent = Notification
+	NotificationSubTitle.BackgroundColor3 = Color3.fromRGB(0, 0, 0)
+	NotificationSubTitle.BackgroundTransparency = 0.800
+	NotificationSubTitle.BorderColor3 = Color3.fromRGB(0, 0, 0)
+	NotificationSubTitle.BorderSizePixel = 0
+	NotificationSubTitle.Position = UDim2.new(0, 0, 0.238461539, 0)
+	NotificationSubTitle.Size = UDim2.new(1, 0, 0.176923081, 0)
+	NotificationSubTitle.Font = Enum.Font.Roboto
+	NotificationSubTitle.Text = SubTitle
+	NotificationSubTitle.TextColor3 = Color3.fromRGB(255, 102, 102)
+	NotificationSubTitle.TextScaled = true
+	NotificationSubTitle.TextSize = 14.000
+	NotificationSubTitle.TextWrapped = true
+
+	UITextSizeConstraint_2.Parent = NotificationSubTitle
+	UITextSizeConstraint_2.MaxTextSize = 23
+
+	NotificationText.Name = "NotificationText"
+	NotificationText.Parent = Notification
+	NotificationText.BackgroundColor3 = Color3.fromRGB(255, 255, 255)
+	NotificationText.BackgroundTransparency = 1.000
+	NotificationText.BorderColor3 = Color3.fromRGB(0, 0, 0)
+	NotificationText.BorderSizePixel = 0
+	NotificationText.Position = UDim2.new(0, 0, 0.446153849, 0)
+	NotificationText.Size = UDim2.new(1, 0, 0.55384618, 0)
+	NotificationText.Font = Enum.Font.Roboto
+	NotificationText.Text = Text
+	NotificationText.TextColor3 = Color3.fromRGB(209, 209, 209)
+	NotificationText.TextScaled = true
+	NotificationText.TextSize = 14.000
+	NotificationText.TextWrapped = true
+	NotificationText.TextYAlignment = Enum.TextYAlignment.Top
+
+	UITextSizeConstraint_3.Parent = NotificationText
+	UITextSizeConstraint_3.MaxTextSize = 31
+
+	game.Debris:AddItem(Notification, 3.2)
+
+	task.delay(3, function()
+		TS:Create(Notification, TweenInfo.new(0.2, Enum.EasingStyle.Quad, Enum.EasingDirection.Out), {Size = UDim2.new(1, 0, 0, 0)}):Play()
+	end)
+end
+
+local function AbsoluteButton(Button)
+	local pos = Button.AbsolutePosition
+
+	local X = pos.X
+	local Y = pos.Y
+
+
+	return X, Y
+end
+
+local function TopFrameButtonSetup(Button)
+	if Button == CurrentPage then return end
+	UiClick:Play()
+	CurrentPage = Button
+
+	for _, v in PagesFolder:GetChildren()  do
+		if v ~= Button.Name then
+
+		end
+	end
+
+	if math.random(1, 2) == 1 then
+		Button.Rotation = 15
+	else
+		Button.Rotation = -15
+	end
+
+	for _, v in TopFrameFolder:GetChildren() do
+		if v:IsA("TextButton") and v ~= CloseButton and v ~= Button then
+			TS:Create(v, TweenInfo.new(0.25, Enum.EasingStyle.Sine, Enum.EasingDirection.InOut), {TextColor3 = Color3.new(0.666667, 0.666667, 0.666667)}):Play()
+		end
+	end
+
+	for _, v in PagesFolder:GetChildren() do
+		if v:IsA("Frame") and v.Name ~= CurrentPage.Name then
+			TS:Create(v, TweenInfo.new(0.25, Enum.EasingStyle.Sine, Enum.EasingDirection.InOut), {Position = UDim2.new(0, 0, -1, 0)}):Play()
+
+			task.delay(0.25, function()
+				if v.Name ~= CurrentPage.Name  then
+					v.Visible = false
+				end
+			end)
+		elseif v:IsA("Frame") and v.Name == CurrentPage.Name then
+			v.Position = UDim2.new(0, 0, 1, 0)
+			v.Visible = true
+			TS:Create(v, TweenInfo.new(0.25, Enum.EasingStyle.Sine, Enum.EasingDirection.InOut), {Position = UDim2.new(0, 0, 0.2, 0)}):Play()
+		end
+	end
+
+	TS:Create(Button, TweenInfo.new(0.15, Enum.EasingStyle.Back, Enum.EasingDirection.Out), {Rotation = 0}):Play()
+	TS:Create(Button, TweenInfo.new(0.25, Enum.EasingStyle.Sine, Enum.EasingDirection.InOut), {TextColor3 = Color3.new(1, 1, 1)}):Play()
+	TS:Create(SelectFrame, TweenInfo.new(0.25, Enum.EasingStyle.Sine, Enum.EasingDirection.InOut), {Size = Button.Size, Position = Button.Position}):Play()
+end
+
+local function SwitcherSetup(Switcher)
+	if Switcher:GetAttribute("Switch") == true then
+		Switcher:SetAttribute("Switch", false)
+		UiOff:Play()
+
+		TS:Create(Switcher, TweenInfo.new(0.15, Enum.EasingStyle.Sine, Enum.EasingDirection.Out), {Position = UDim2.new(1.225, 0, 0.195, 0), BackgroundColor3 = Color3.new(0.545098, 0.545098, 0.545098)}):Play()
+		TS:Create(Switcher.Parent, TweenInfo.new(0.15, Enum.EasingStyle.Sine, Enum.EasingDirection.Out), {TextColor3 = Color3.new(0.545098, 0.545098, 0.545098)}):Play()
+		TS:Create(Switcher.Parent.Background, TweenInfo.new(0.15, Enum.EasingStyle.Sine, Enum.EasingDirection.Out), {BackgroundColor3 = Color3.new(0.0666667, 0.0666667, 0.0666667)}):Play()
+	else
+		Switcher:SetAttribute("Switch", true)
+		UiOn:Play()
+
+		TS:Create(Switcher, TweenInfo.new(0.15, Enum.EasingStyle.Sine, Enum.EasingDirection.Out), {Position = UDim2.new(1.55, 0, 0.195, 0), BackgroundColor3 = Color3.new(1, 1, 1)}):Play()
+		TS:Create(Switcher.Parent, TweenInfo.new(0.15, Enum.EasingStyle.Sine, Enum.EasingDirection.Out), {TextColor3 = Color3.new(1, 1, 1)}):Play()
+		TS:Create(Switcher.Parent.Background, TweenInfo.new(0.15, Enum.EasingStyle.Sine, Enum.EasingDirection.Out), {BackgroundColor3 = Color3.new(0.8, 0.352941, 0.352941)}):Play()
+	end
+end
+
+local function WallHackHL(Char)
+	local WH_HL = Instance.new("Highlight", Char)
+	WH_HL.FillTransparency = 1
+	WH_HL.OutlineTransparency = 1
+	TS:Create(WH_HL, TweenInfo.new(0.25, Enum.EasingStyle.Sine, Enum.EasingDirection.InOut), {OutlineTransparency = 0}):Play()
+	WH_HL.OutlineColor = WHColor
+	WH_HL.Name = "WallHackHL"
+end
+
+local function SmoothColorChangeWH(Char)
+	local WH_HL = Char:FindFirstChild("WallHackHL")
+
+	if WH_HL then
+		TS:Create(WH_HL, TweenInfo.new(0.25, Enum.EasingStyle.Sine, Enum.EasingDirection.InOut), {OutlineColor = WHColor}):Play()
+	end
+end
+
+local function hexToColor3(hex)
+	hex = hex:gsub("#","")
+	if #hex == 6 then
+		local r = tonumber(hex:sub(1,2),16)/255
+		local g = tonumber(hex:sub(3,4),16)/255
+		local b = tonumber(hex:sub(5,6),16)/255
+		return Color3.new(r,g,b)
+	end
+	return nil
+end
+
+WHTextBox:GetPropertyChangedSignal("Text"):Connect(function()
+	local color = hexToColor3(WHTextBox.Text)
+	if color then
+		WHPredictColor.BackgroundColor3 = color
+	end
+end)
+
+WHTextBox.FocusLost:Connect(function(enterPressed)
+	if enterPressed then
+		local color = hexToColor3(WHTextBox.Text)
+		if color then
+			WHPredictColor.BackgroundColor3 = color
+			WHColor = color
+			WHColorButton.BackgroundColor3 = color
+
+			UiNotificator:Play()
+			Notification("Notification", "Wall Hack", "Color changed successfully!")
+
+			for _, v in workspace:GetChildren() do
+				if v:IsA("Model") and v:FindFirstChild("Humanoid") and v ~= Character then
+					SmoothColorChangeWH(v)
+				end
+			end
+		end
+
+		WHColorButton:SetAttribute("Active", false)
+		WHColorChooseFrame.Visible = false
+	end
+end)
+
+for _, v in TopFrameFolder:GetChildren() do
+	if v:IsA("TextButton") and v ~= CloseButton then
+		v.MouseButton1Click:Connect(function()
+			TopFrameButtonSetup(v)
+		end)
+	end
+end
+
+RNS.Heartbeat:Connect(function()
+	
+	--[[
+	if game.ReplicatedStorage:FindFirstChild("Data") then
+		Element.Text = "Element: " .. game:GetService("ReplicatedStorage").Data[Player.UserId].Element.Value
+	end]]
+
+	if WHSwitchButton:GetAttribute("Switch") == true then
+		for _, v in Entities:GetChildren() do
+			if v:IsA("Model") and v:FindFirstChild("Humanoid") and not v:FindFirstChild("WallHackHL") and v ~= Character then
+				WallHackHL(v)
+			end
+		end
+	end
+end)
+
+UIS.InputBegan:Connect(function(input, isProcessed)
+	if isProcessed then return end
+
+	if input.KeyCode == Enum.KeyCode.R then
+		if TPSwitchButton:GetAttribute("Switch") == true then
+			local targetPosition = Player:GetMouse().Hit.Position + Vector3.new(0, 3, 0)
+			HumRP.CFrame = CFrame.new(targetPosition)
+
+			UiNotificator:Play()
+			Notification("Notification", "Teleport", "Successfully teleported to the mouse position")
+		end
+	end
+end)
+
+TPSwitchButton.MouseButton1Click:Connect(function()
+	SwitcherSetup(TPSwitchButton)
+end)
+
+local function GetBestTarget()
+	local BestTarget = nil
+	local BestScore = math.huge
+
+	for _, Target in Entities:GetChildren() do
+		if Target:IsA("Model") then
+
+			local TargetHumanoid = Target:FindFirstChild("Humanoid")
+			local TargetHRP = Target:FindFirstChild("HumanoidRootPart")
+
+			if TargetHumanoid and TargetHRP then
+				if Target.Name ~= "Frute" and Target.Name ~= "Lichen" and Target ~= Character then
+
+					if Target.Name == "Balith" then
+						BestTarget = TargetHRP
+						return BestTarget
+					else
+						if TargetHRP.Position.Y > -1 and TargetHRP.Position.Y < 150 then
+							local Distance = (HumRP.Position - TargetHRP.Position).Magnitude
+
+							local Score = TargetHumanoid.Health * 5 + Distance
+
+							if Score < BestScore then
+								BestScore = Score
+								BestTarget = TargetHRP
+							end
+						end
+					end
+
+				end
+			end
+		end
+	end
+
+	return BestTarget
+end
+
+task.spawn(function()
+	while task.wait(0.3) do
+		if AutoKillState and Humanoid.Health > 0 then
+			if HumRP.Position.Y >= 150 then
+				HumRP.CFrame = CFrame.new(0, 758.75, 29.5)
+				task.wait(1)
+			else
+				local TargetHRP: BasePart = GetBestTarget()
+
+				if TargetHRP then
+					HumRP.CFrame = TargetHRP.CFrame * CFrame.new(0, -1, 5)
+					VIM:SendMouseButtonEvent(100, 200, 0, true, game, 0)
+				end
+			end
+		end	
+	end
+end)
+
+AutoKillSwitchButton.MouseButton1Click:Connect(function()
+	SwitcherSetup(AutoKillSwitchButton)
+	AutoKillState = not AutoKillState
+	
+	if AutoKillSwitchButton:GetAttribute("Switch") == true then
+		Notification("Notification", "Auto Kill", "Auto Kill ON")
+	else
+		Notification("Notification", "Auto Kill", "Auto Kill OFF")
+	end
+end)
+
+WHColorButton.MouseButton1Click:Connect(function()
+	if WHColorButton:GetAttribute("Active") == true then
+		WHColorButton:SetAttribute("Active", false)
+		WHColorChooseFrame.Visible = false
+	else
+		WHColorButton:SetAttribute("Active", true)
+		WHColorChooseFrame.Visible = true
+	end
+end)
+
+WHSwitchButton.MouseButton1Click:Connect(function()
+	SwitcherSetup(WHSwitchButton)
+	if WHSwitchButton:GetAttribute("Switch") == true then
+
+		Notification("Notification", "Wall Hack", "Wall Hack ON")
+
+		for _, v in workspace:GetChildren() do
+			if v:IsA("Model") and v:FindFirstChild("Humanoid") and v ~= Character then
+				WallHackHL(v)
+			end
+		end
+	else
+
+		Notification("Notification", "Wall Hack", "Wall Hack OFF")
+
+		for _, v in workspace:GetDescendants() do
+			if v:IsA("Highlight") and v.Name == "WallHackHL" then
+				TS:Create(v, TweenInfo.new(0.25, Enum.EasingStyle.Sine, Enum.EasingDirection.InOut), {OutlineTransparency = 1}):Play()
+				task.delay(0.25, function()
+					v:Destroy()
+				end)
+			end
+		end
+	end
+end)
+
+CloseButton.MouseButton1Click:Connect(function()
+	UiClose:Play()
+	CloseButton.Interactable = false
+	TS:Create(Background, TweenInfo.new(0.25, Enum.EasingStyle.Quad, Enum.EasingDirection.InOut), {Size = UDim2.new(0, 0, 0, 0)}):Play()
+
+	task.delay(0.2, function()
+		ButtonTag.Position = Background.Position
+		ButtonTag.Visible = true
+		Background.Visible = false
+		ButtonTag.Interactable = true
+	end)
+end)
+
+ButtonTag.MouseButton1Click:Connect(function()
+	UiOpen:Play()
+	ButtonTag.Interactable = false
+	TS:Create(Background, TweenInfo.new(0.25, Enum.EasingStyle.Quad, Enum.EasingDirection.InOut), {Size = UDim2.new(0.277, 0, 0.282, 0)}):Play()
+	Background.Visible = true
+	CloseButton.Interactable = true
+
+	task.delay(0.25, function()
+		ButtonTag.Visible = false
+	end)
+end)
+
+-- Character Reseting
+Player.CharacterAdded:Connect(function(char)
+	Character = char
+	Humanoid = char:WaitForChild("Humanoid")
+	HumRP = char:WaitForChild("HumanoidRootPart")
+end)
