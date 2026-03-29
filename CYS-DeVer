@@ -522,7 +522,7 @@ HitAura.Position = UDim2.new(0.529946148, 0, 0.668045223, 0)
 HitAura.Size = UDim2.new(0.214784697, 0, 0.171117067, 0)
 HitAura.ZIndex = 2
 HitAura.Font = Enum.Font.Oswald
-HitAura.Text = "Hit Aura (K)"
+HitAura.Text = "Hit Aura (X)"
 HitAura.TextColor3 = Color3.fromRGB(139, 139, 139)
 HitAura.TextScaled = true
 HitAura.TextSize = 14.000
@@ -1410,7 +1410,7 @@ UIS.InputBegan:Connect(function(Input, isProcessed)
 
 			UiNotificator:Play()
 		end
-	elseif Input.KeyCode == Enum.KeyCode.K then
+	elseif Input.KeyCode == Enum.KeyCode.X then
 		HitAuraState = not HitAuraState
 		SwitcherSetup(HitAuraSwitchButton)
 
