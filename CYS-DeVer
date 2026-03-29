@@ -14,7 +14,11 @@ local PathfindingService = game:GetService("PathfindingService")
 
 local AutoKillState = false
 local AutoFarmState = false
+local KnifeAutoBlockState = false
 local AimAssistState = false
+local FastWalkState = false
+local AntiRagdollState = false
+local AntiKnockbackState = false
 local AimAssistCD = false
 local WHColor = Color3.new(1, 0.388235, 0.388235)
 
@@ -379,6 +383,124 @@ AimAssistBackgroundUICorner.CornerRadius = UDim.new(1, 0)
 AimAssistBackgroundUICorner.Name = "AimAssistBackgroundUICorner"
 AimAssistBackgroundUICorner.Parent = AimAssistBackground
 
+local AutoFarm = Instance.new("TextLabel")
+local AutoFarmSwitchButton = Instance.new("TextButton")
+local AutoFarmSwitchButtonUICorner = Instance.new("UICorner")
+local AutoFarmUITextSizeConstraint = Instance.new("UITextSizeConstraint")
+local AutoFarmBackground = Instance.new("Frame")
+local AutoFarmBackgroundUICorner = Instance.new("UICorner")
+
+--Properties:
+
+AutoFarm.Name = "AutoFarm"
+AutoFarm.Parent = Combat
+AutoFarm.BackgroundColor3 = Color3.fromRGB(255, 255, 255)
+AutoFarm.BackgroundTransparency = 1.000
+AutoFarm.BorderColor3 = Color3.fromRGB(0, 0, 0)
+AutoFarm.BorderSizePixel = 0
+AutoFarm.Position = UDim2.new(0.041775059, 0, 0.651628137, 0)
+AutoFarm.Size = UDim2.new(0.214784697, 0, 0.171117067, 0)
+AutoFarm.ZIndex = 2
+AutoFarm.Font = Enum.Font.Oswald
+AutoFarm.Text = "Auto Farm"
+AutoFarm.TextColor3 = Color3.fromRGB(139, 139, 139)
+AutoFarm.TextScaled = true
+AutoFarm.TextSize = 14.000
+AutoFarm.TextWrapped = true
+AutoFarm.TextXAlignment = Enum.TextXAlignment.Left
+
+AutoFarmSwitchButton.Name = "AutoFarmSwitchButton"
+AutoFarmSwitchButton.Parent = AutoFarm
+AutoFarmSwitchButton.BackgroundColor3 = Color3.fromRGB(139, 139, 139)
+AutoFarmSwitchButton.BorderColor3 = Color3.fromRGB(0, 0, 0)
+AutoFarmSwitchButton.BorderSizePixel = 0
+AutoFarmSwitchButton.Position = UDim2.new(1.22538996, 0, 0.19466123, 0)
+AutoFarmSwitchButton.Size = UDim2.new(0.293512404, 0, 0.805339217, 0)
+AutoFarmSwitchButton.ZIndex = 2
+AutoFarmSwitchButton.Font = Enum.Font.SourceSans
+AutoFarmSwitchButton.Text = ""
+AutoFarmSwitchButton.TextColor3 = Color3.fromRGB(0, 0, 0)
+AutoFarmSwitchButton.TextSize = 14.000
+
+AutoFarmSwitchButtonUICorner.CornerRadius = UDim.new(1, 0)
+AutoFarmSwitchButtonUICorner.Name = "AutoFarmSwitchButtonUICorner"
+AutoFarmSwitchButtonUICorner.Parent = AutoFarmSwitchButton
+
+AutoFarmUITextSizeConstraint.Name = "AutoFarmUITextSizeConstraint"
+AutoFarmUITextSizeConstraint.Parent = AutoFarm
+AutoFarmUITextSizeConstraint.MaxTextSize = 41
+
+AutoFarmBackground.Name = "Background"
+AutoFarmBackground.Parent = AutoFarm
+AutoFarmBackground.BackgroundColor3 = Color3.fromRGB(17, 17, 17)
+AutoFarmBackground.BorderColor3 = Color3.fromRGB(0, 0, 0)
+AutoFarmBackground.BorderSizePixel = 0
+AutoFarmBackground.Position = UDim2.new(1.29799902, 0, 0.194999263, 0)
+AutoFarmBackground.Size = UDim2.new(0.477136731, 0, 0.805000663, 0)
+
+AutoFarmBackgroundUICorner.CornerRadius = UDim.new(1, 0)
+AutoFarmBackgroundUICorner.Name = "AutoFarmBackgroundUICorner"
+AutoFarmBackgroundUICorner.Parent = AutoFarmBackground
+
+local KnifeAutoBlock = Instance.new("TextLabel")
+local KnifeAutoBlockSwitchButton = Instance.new("TextButton")
+local KnifeAutoBlockSwitchButtonUICorner = Instance.new("UICorner")
+local KnifeAutoBlockUITextSizeConstraint = Instance.new("UITextSizeConstraint")
+local KnifeAutoBlockBackground = Instance.new("Frame")
+local KnifeAutoBlockBackgroundUICorner = Instance.new("UICorner")
+
+--Properties:
+
+KnifeAutoBlock.Name = "KnifeAutoBlock"
+KnifeAutoBlock.Parent = Combat
+KnifeAutoBlock.BackgroundColor3 = Color3.fromRGB(255, 255, 255)
+KnifeAutoBlock.BackgroundTransparency = 1.000
+KnifeAutoBlock.BorderColor3 = Color3.fromRGB(0, 0, 0)
+KnifeAutoBlock.BorderSizePixel = 0
+KnifeAutoBlock.Position = UDim2.new(0.529946148, 0, 0.21246998, 0)
+KnifeAutoBlock.Size = UDim2.new(0.214784697, 0, 0.171117067, 0)
+KnifeAutoBlock.ZIndex = 2
+KnifeAutoBlock.Font = Enum.Font.Oswald
+KnifeAutoBlock.Text = "Knife A-Block"
+KnifeAutoBlock.TextColor3 = Color3.fromRGB(139, 139, 139)
+KnifeAutoBlock.TextScaled = true
+KnifeAutoBlock.TextSize = 32.000
+KnifeAutoBlock.TextWrapped = true
+KnifeAutoBlock.TextXAlignment = Enum.TextXAlignment.Left
+
+KnifeAutoBlockSwitchButton.Name = "KnifeAutoBlockSwitchButton"
+KnifeAutoBlockSwitchButton.Parent = KnifeAutoBlock
+KnifeAutoBlockSwitchButton.BackgroundColor3 = Color3.fromRGB(139, 139, 139)
+KnifeAutoBlockSwitchButton.BorderColor3 = Color3.fromRGB(0, 0, 0)
+KnifeAutoBlockSwitchButton.BorderSizePixel = 0
+KnifeAutoBlockSwitchButton.Position = UDim2.new(1.22538996, 0, 0.19466123, 0)
+KnifeAutoBlockSwitchButton.Size = UDim2.new(0.293512404, 0, 0.805339217, 0)
+KnifeAutoBlockSwitchButton.ZIndex = 2
+KnifeAutoBlockSwitchButton.Font = Enum.Font.SourceSans
+KnifeAutoBlockSwitchButton.Text = ""
+KnifeAutoBlockSwitchButton.TextColor3 = Color3.fromRGB(0, 0, 0)
+KnifeAutoBlockSwitchButton.TextSize = 14.000
+
+KnifeAutoBlockSwitchButtonUICorner.CornerRadius = UDim.new(1, 0)
+KnifeAutoBlockSwitchButtonUICorner.Name = "KnifeAutoBlockSwitchButtonUICorner"
+KnifeAutoBlockSwitchButtonUICorner.Parent = KnifeAutoBlockSwitchButton
+
+KnifeAutoBlockUITextSizeConstraint.Name = "KnifeAutoBlockUITextSizeConstraint"
+KnifeAutoBlockUITextSizeConstraint.Parent = KnifeAutoBlock
+KnifeAutoBlockUITextSizeConstraint.MaxTextSize = 41
+
+KnifeAutoBlockBackground.Name = "Background"
+KnifeAutoBlockBackground.Parent = KnifeAutoBlock
+KnifeAutoBlockBackground.BackgroundColor3 = Color3.fromRGB(17, 17, 17)
+KnifeAutoBlockBackground.BorderColor3 = Color3.fromRGB(0, 0, 0)
+KnifeAutoBlockBackground.BorderSizePixel = 0
+KnifeAutoBlockBackground.Position = UDim2.new(1.29799902, 0, 0.194999263, 0)
+KnifeAutoBlockBackground.Size = UDim2.new(0.477136731, 0, 0.805000663, 0)
+
+KnifeAutoBlockBackgroundUICorner.CornerRadius = UDim.new(1, 0)
+KnifeAutoBlockBackgroundUICorner.Name = "KnifeAutoBlockBackgroundUICorner"
+KnifeAutoBlockBackgroundUICorner.Parent = KnifeAutoBlockBackground
+
 --# Movement
 
 local Movement = Instance.new("Frame")
@@ -451,6 +573,183 @@ TPBackground.Size = UDim2.new(0.477136731, 0, 0.805000663, 0)
 TPBackgroundUICorner.CornerRadius = UDim.new(1, 0)
 TPBackgroundUICorner.Name = "TPBackgroundUICorner"
 TPBackgroundUICorner.Parent = TPBackground
+
+local FastWalk = Instance.new("TextLabel")
+local FastWalkSwitchButton = Instance.new("TextButton")
+local FastWalkSwitchButtonUICorner = Instance.new("UICorner")
+local FastWalkUITextSizeConstraint = Instance.new("UITextSizeConstraint")
+local FastWalkBackground = Instance.new("Frame")
+local TPBackgroundUICorner = Instance.new("UICorner")
+
+--Properties:
+
+FastWalk.Name = "FastWalk"
+FastWalk.Parent = Movement
+FastWalk.BackgroundColor3 = Color3.fromRGB(255, 255, 255)
+FastWalk.BackgroundTransparency = 1.000
+FastWalk.BorderColor3 = Color3.fromRGB(0, 0, 0)
+FastWalk.BorderSizePixel = 0
+FastWalk.Position = UDim2.new(0.0398674048, 0, 0.242356777, 0)
+FastWalk.Size = UDim2.new(0.214784682, 0, 0.168430388, 0)
+FastWalk.ZIndex = 2
+FastWalk.Font = Enum.Font.Oswald
+FastWalk.Text = "Fast Walk"
+FastWalk.TextColor3 = Color3.fromRGB(139, 139, 139)
+FastWalk.TextScaled = true
+FastWalk.TextSize = 14.000
+FastWalk.TextWrapped = true
+FastWalk.TextXAlignment = Enum.TextXAlignment.Left
+
+FastWalkSwitchButton.Name = "FastWalkSwitchButton"
+FastWalkSwitchButton.Parent = FastWalk
+FastWalkSwitchButton.BackgroundColor3 = Color3.fromRGB(139, 139, 139)
+FastWalkSwitchButton.BorderColor3 = Color3.fromRGB(0, 0, 0)
+FastWalkSwitchButton.BorderSizePixel = 0
+FastWalkSwitchButton.Position = UDim2.new(1.22538996, 0, 0.19466123, 0)
+FastWalkSwitchButton.Size = UDim2.new(0.293512404, 0, 0.805339217, 0)
+FastWalkSwitchButton.ZIndex = 2
+FastWalkSwitchButton.Font = Enum.Font.SourceSans
+FastWalkSwitchButton.Text = ""
+FastWalkSwitchButton.TextColor3 = Color3.fromRGB(0, 0, 0)
+FastWalkSwitchButton.TextSize = 14.000
+
+FastWalkSwitchButtonUICorner.CornerRadius = UDim.new(1, 0)
+FastWalkSwitchButtonUICorner.Name = "FastWalkSwitchButtonUICorner"
+FastWalkSwitchButtonUICorner.Parent = FastWalkSwitchButton
+
+FastWalkUITextSizeConstraint.Name = "FastWalkUITextSizeConstraint"
+FastWalkUITextSizeConstraint.Parent = FastWalk
+FastWalkUITextSizeConstraint.MaxTextSize = 41
+
+FastWalkBackground.Name = "Background"
+FastWalkBackground.Parent = FastWalk
+FastWalkBackground.BackgroundColor3 = Color3.fromRGB(17, 17, 17)
+FastWalkBackground.BorderColor3 = Color3.fromRGB(0, 0, 0)
+FastWalkBackground.BorderSizePixel = 0
+FastWalkBackground.Position = UDim2.new(1.29799902, 0, 0.194999263, 0)
+FastWalkBackground.Size = UDim2.new(0.477136731, 0, 0.805000663, 0)
+
+TPBackgroundUICorner.CornerRadius = UDim.new(1, 0)
+TPBackgroundUICorner.Name = "TPBackgroundUICorner"
+TPBackgroundUICorner.Parent = FastWalkBackground
+
+local AntiRagdoll = Instance.new("TextLabel")
+local AntiRagdollSwitchButton = Instance.new("TextButton")
+local AntiRagdollSwitchButtonUICorner = Instance.new("UICorner")
+local AntiRagdollUITextSizeConstraint = Instance.new("UITextSizeConstraint")
+local AntiRagdollBackground = Instance.new("Frame")
+local AntiRagdollBackgroundUICorner = Instance.new("UICorner")
+
+--Properties:
+
+AntiRagdoll.Name = "AntiRagdoll"
+AntiRagdoll.Parent = Movement
+AntiRagdoll.BackgroundColor3 = Color3.fromRGB(255, 255, 255)
+AntiRagdoll.BackgroundTransparency = 1.000
+AntiRagdoll.BorderColor3 = Color3.fromRGB(0, 0, 0)
+AntiRagdoll.BorderSizePixel = 0
+AntiRagdoll.Position = UDim2.new(0.0417749025, 0, 0.439362288, 0)
+AntiRagdoll.Size = UDim2.new(0.214784682, 0, 0.168430388, 0)
+AntiRagdoll.ZIndex = 2
+AntiRagdoll.Font = Enum.Font.Oswald
+AntiRagdoll.Text = "Anti-Ragdoll"
+AntiRagdoll.TextColor3 = Color3.fromRGB(139, 139, 139)
+AntiRagdoll.TextScaled = true
+AntiRagdoll.TextSize = 14.000
+AntiRagdoll.TextWrapped = true
+AntiRagdoll.TextXAlignment = Enum.TextXAlignment.Left
+
+AntiRagdollSwitchButton.Name = "AntiRagdollSwitchButton"
+AntiRagdollSwitchButton.Parent = AntiRagdoll
+AntiRagdollSwitchButton.BackgroundColor3 = Color3.fromRGB(139, 139, 139)
+AntiRagdollSwitchButton.BorderColor3 = Color3.fromRGB(0, 0, 0)
+AntiRagdollSwitchButton.BorderSizePixel = 0
+AntiRagdollSwitchButton.Position = UDim2.new(1.22538996, 0, 0.19466123, 0)
+AntiRagdollSwitchButton.Size = UDim2.new(0.293512404, 0, 0.805339217, 0)
+AntiRagdollSwitchButton.ZIndex = 2
+AntiRagdollSwitchButton.Font = Enum.Font.SourceSans
+AntiRagdollSwitchButton.Text = ""
+AntiRagdollSwitchButton.TextColor3 = Color3.fromRGB(0, 0, 0)
+AntiRagdollSwitchButton.TextSize = 14.000
+
+AntiRagdollSwitchButtonUICorner.CornerRadius = UDim.new(1, 0)
+AntiRagdollSwitchButtonUICorner.Name = "AntiRagdollSwitchButtonUICorner"
+AntiRagdollSwitchButtonUICorner.Parent = AntiRagdollSwitchButton
+
+AntiRagdollUITextSizeConstraint.Name = "AntiRagdollUITextSizeConstraint"
+AntiRagdollUITextSizeConstraint.Parent = AntiRagdoll
+AntiRagdollUITextSizeConstraint.MaxTextSize = 41
+
+AntiRagdollBackground.Name = "Background"
+AntiRagdollBackground.Parent = AntiRagdoll
+AntiRagdollBackground.BackgroundColor3 = Color3.fromRGB(17, 17, 17)
+AntiRagdollBackground.BorderColor3 = Color3.fromRGB(0, 0, 0)
+AntiRagdollBackground.BorderSizePixel = 0
+AntiRagdollBackground.Position = UDim2.new(1.29799902, 0, 0.194999263, 0)
+AntiRagdollBackground.Size = UDim2.new(0.477136731, 0, 0.805000663, 0)
+
+AntiRagdollBackgroundUICorner.CornerRadius = UDim.new(1, 0)
+AntiRagdollBackgroundUICorner.Name = "AntiRagdollBackgroundUICorner"
+AntiRagdollBackgroundUICorner.Parent = AntiRagdollBackground
+
+local AntiKnockback = Instance.new("TextLabel")
+local AntiKnockbackSwitchButton = Instance.new("TextButton")
+local AntiKnockbackSwitchButtonUICorner = Instance.new("UICorner")
+local AntiKnockbackUITextSizeConstraint = Instance.new("UITextSizeConstraint")
+local AntiKnockbackBackground = Instance.new("Frame")
+local AntiKnockbackBackgroundUICorner = Instance.new("UICorner")
+
+--Properties:
+
+AntiKnockback.Name = "AntiKnockback"
+AntiKnockback.Parent = Movement
+AntiKnockback.BackgroundColor3 = Color3.fromRGB(255, 255, 255)
+AntiKnockback.BackgroundTransparency = 1.000
+AntiKnockback.BorderColor3 = Color3.fromRGB(0, 0, 0)
+AntiKnockback.BorderSizePixel = 0
+AntiKnockback.Position = UDim2.new(0.0398674048, 0, 0.640472114, 0)
+AntiKnockback.Size = UDim2.new(0.214784682, 0, 0.168430388, 0)
+AntiKnockback.ZIndex = 2
+AntiKnockback.Font = Enum.Font.Oswald
+AntiKnockback.Text = "Anti-Knockback"
+AntiKnockback.TextColor3 = Color3.fromRGB(139, 139, 139)
+AntiKnockback.TextScaled = true
+AntiKnockback.TextSize = 14.000
+AntiKnockback.TextWrapped = true
+AntiKnockback.TextXAlignment = Enum.TextXAlignment.Left
+
+AntiKnockbackSwitchButton.Name = "AntiKnockbackSwitchButton"
+AntiKnockbackSwitchButton.Parent = AntiKnockback
+AntiKnockbackSwitchButton.BackgroundColor3 = Color3.fromRGB(139, 139, 139)
+AntiKnockbackSwitchButton.BorderColor3 = Color3.fromRGB(0, 0, 0)
+AntiKnockbackSwitchButton.BorderSizePixel = 0
+AntiKnockbackSwitchButton.Position = UDim2.new(1.22538996, 0, 0.19466123, 0)
+AntiKnockbackSwitchButton.Size = UDim2.new(0.293512404, 0, 0.805339217, 0)
+AntiKnockbackSwitchButton.ZIndex = 2
+AntiKnockbackSwitchButton.Font = Enum.Font.SourceSans
+AntiKnockbackSwitchButton.Text = ""
+AntiKnockbackSwitchButton.TextColor3 = Color3.fromRGB(0, 0, 0)
+AntiKnockbackSwitchButton.TextSize = 14.000
+
+AntiKnockbackSwitchButtonUICorner.CornerRadius = UDim.new(1, 0)
+AntiKnockbackSwitchButtonUICorner.Name = "AntiKnockbackSwitchButtonUICorner"
+AntiKnockbackSwitchButtonUICorner.Parent = AntiKnockbackSwitchButton
+
+AntiKnockbackUITextSizeConstraint.Name = "AntiKnockbackUITextSizeConstraint"
+AntiKnockbackUITextSizeConstraint.Parent = AntiKnockback
+AntiKnockbackUITextSizeConstraint.MaxTextSize = 41
+
+AntiKnockbackBackground.Name = "Background"
+AntiKnockbackBackground.Parent = AntiKnockback
+AntiKnockbackBackground.BackgroundColor3 = Color3.fromRGB(17, 17, 17)
+AntiKnockbackBackground.BorderColor3 = Color3.fromRGB(0, 0, 0)
+AntiKnockbackBackground.BorderSizePixel = 0
+AntiKnockbackBackground.Position = UDim2.new(1.29799902, 0, 0.194999263, 0)
+AntiKnockbackBackground.Size = UDim2.new(0.477136731, 0, 0.805000663, 0)
+
+AntiKnockbackBackgroundUICorner.CornerRadius = UDim.new(1, 0)
+AntiKnockbackBackgroundUICorner.Name = "AntiKnockbackBackgroundUICorner"
+AntiKnockbackBackgroundUICorner.Parent = AntiKnockbackBackground
 
 --# Visuals
 
@@ -590,65 +889,6 @@ WHColorButton:SetAttribute("Active", false)
 WHColorButtonUICorner.CornerRadius = UDim.new(0.300000012, 0)
 WHColorButtonUICorner.Name = "WHColorButtonUICorner"
 WHColorButtonUICorner.Parent = WHColorButton
-
-local AutoFarm = Instance.new("TextLabel")
-local AutoFarmSwitchButton = Instance.new("TextButton")
-local AutoFarmSwitchButtonUICorner = Instance.new("UICorner")
-local AutoFarmUITextSizeConstraint = Instance.new("UITextSizeConstraint")
-local AutoFarmBackground = Instance.new("Frame")
-local AutoFarmBackgroundUICorner = Instance.new("UICorner")
-
---Properties:
-
-AutoFarm.Name = "AutoFarm"
-AutoFarm.Parent = Combat
-AutoFarm.BackgroundColor3 = Color3.fromRGB(255, 255, 255)
-AutoFarm.BackgroundTransparency = 1.000
-AutoFarm.BorderColor3 = Color3.fromRGB(0, 0, 0)
-AutoFarm.BorderSizePixel = 0
-AutoFarm.Position = UDim2.new(0.041775059, 0, 0.651628137, 0)
-AutoFarm.Size = UDim2.new(0.214784697, 0, 0.171117067, 0)
-AutoFarm.ZIndex = 2
-AutoFarm.Font = Enum.Font.Oswald
-AutoFarm.Text = "Auto Farm"
-AutoFarm.TextColor3 = Color3.fromRGB(139, 139, 139)
-AutoFarm.TextScaled = true
-AutoFarm.TextSize = 14.000
-AutoFarm.TextWrapped = true
-AutoFarm.TextXAlignment = Enum.TextXAlignment.Left
-
-AutoFarmSwitchButton.Name = "AutoFarmSwitchButton"
-AutoFarmSwitchButton.Parent = AutoFarm
-AutoFarmSwitchButton.BackgroundColor3 = Color3.fromRGB(139, 139, 139)
-AutoFarmSwitchButton.BorderColor3 = Color3.fromRGB(0, 0, 0)
-AutoFarmSwitchButton.BorderSizePixel = 0
-AutoFarmSwitchButton.Position = UDim2.new(1.22538996, 0, 0.19466123, 0)
-AutoFarmSwitchButton.Size = UDim2.new(0.293512404, 0, 0.805339217, 0)
-AutoFarmSwitchButton.ZIndex = 2
-AutoFarmSwitchButton.Font = Enum.Font.SourceSans
-AutoFarmSwitchButton.Text = ""
-AutoFarmSwitchButton.TextColor3 = Color3.fromRGB(0, 0, 0)
-AutoFarmSwitchButton.TextSize = 14.000
-
-AutoFarmSwitchButtonUICorner.CornerRadius = UDim.new(1, 0)
-AutoFarmSwitchButtonUICorner.Name = "AutoFarmSwitchButtonUICorner"
-AutoFarmSwitchButtonUICorner.Parent = AutoFarmSwitchButton
-
-AutoFarmUITextSizeConstraint.Name = "AutoFarmUITextSizeConstraint"
-AutoFarmUITextSizeConstraint.Parent = AutoFarm
-AutoFarmUITextSizeConstraint.MaxTextSize = 41
-
-AutoFarmBackground.Name = "Background"
-AutoFarmBackground.Parent = AutoFarm
-AutoFarmBackground.BackgroundColor3 = Color3.fromRGB(17, 17, 17)
-AutoFarmBackground.BorderColor3 = Color3.fromRGB(0, 0, 0)
-AutoFarmBackground.BorderSizePixel = 0
-AutoFarmBackground.Position = UDim2.new(1.29799902, 0, 0.194999263, 0)
-AutoFarmBackground.Size = UDim2.new(0.477136731, 0, 0.805000663, 0)
-
-AutoFarmBackgroundUICorner.CornerRadius = UDim.new(1, 0)
-AutoFarmBackgroundUICorner.Name = "AutoFarmBackgroundUICorner"
-AutoFarmBackgroundUICorner.Parent = AutoFarmBackground
 
 -- // Functions \\ --
 local CurrentPage = CombatButton
@@ -835,7 +1075,7 @@ end
 
 local Hitbox = {}
 
-function Hitbox.Create(Size, InstancePart, Offset, LifeTime)
+function Hitbox.Create(Size: Vector3, InstancePart: BasePart, Offset: CFrame, LifeTime: number, Visible: boolean)
 	local Part = Instance.new("Part")
 	Part.Size = Size or Vector3.new(7, 7, 7)
 
@@ -848,6 +1088,10 @@ function Hitbox.Create(Size, InstancePart, Offset, LifeTime)
 	Part.CanCollide = false
 	Part.CastShadow = false
 	Part.Parent = workspace
+	
+	if Visible == false then
+		Part.Transparency = 1
+	end
 
 	Debris:AddItem(Part, LifeTime or 0.1)
 
@@ -885,7 +1129,7 @@ UIS.InputBegan:Connect(function(Input, GameProcessed)
 
 		AimAssistCD = true
 
-		local HB = Hitbox.Create(Vector3.new(10, 7, 25), HumRP, CFrame.new(0, 0, -7.5), 0.05)
+		local HB = Hitbox.Create(Vector3.new(10, 7, 25), HumRP, CFrame.new(0, 0, -7.5), 0.05, true)
 		Hitbox.OnTouched(HB, function(EnemyCharacter: Model, EnemyHumanoid: Humanoid)
 			local EnemyHRP = EnemyCharacter:FindFirstChild("HumanoidRootPart")
 			if not EnemyHRP then return end
@@ -969,9 +1213,48 @@ for _, v in TopFrameFolder:GetChildren() do
 	end
 end
 
+-- Auto Knife Block
+task.spawn(function()
+	while task.wait(0.05) do
+		if KnifeAutoBlockState == true and Humanoid.Health > 0 then
+			for _, EnemyCharacter in Entities:GetChildren() do
+				if EnemyCharacter:IsA("Model") and EnemyCharacter ~= Character then
+					local EnemyHRP = EnemyCharacter:FindFirstChild("HumanoidRootPart")
+					local EnemyHum = EnemyCharacter:FindFirstChild("Humanoid")
+
+					if EnemyHRP and EnemyHum and EnemyHum.Health > 0 then
+						local Distance = (HumRP.Position - EnemyHRP.Position).Magnitude
+
+						if Distance <= 20 then
+							local NeedBlock = false
+
+							for _, EnemyPart in EnemyCharacter:GetDescendants() do
+								if EnemyPart:IsA("Sound") and EnemyPart.Playing == true then
+									NeedBlock = true
+								end
+							end
+
+							if NeedBlock == true then
+								VIM:SendMouseButtonEvent(500, 500, 1, true, game, 0)
+
+								task.wait(0.3) 
+								VIM:SendMouseButtonEvent(500, 500, 1, false, game, 0)
+							end
+						end
+					end
+				end
+			end
+		end
+	end
+end)
+
 RNS.Heartbeat:Connect(function()
 	if Player:GetAttribute("Aspect") then
 		PowerText.Text = "Power: " .. Player:GetAttribute("Aspect")
+	end
+
+	if AntiRagdollState == true then
+		Humanoid:SetAttribute("Ragdoll", false)
 	end
 
 	if WHSwitchButton:GetAttribute("Switch") == true then
@@ -982,6 +1265,17 @@ RNS.Heartbeat:Connect(function()
 		end
 	end
 end)
+
+if AntiRagdollState then
+	if HumRP:WaitForChild("RootAttachment") then
+		HumRP:WaitForChild("RootAttachment").ChildAdded:Connect(function(Child)
+			if Child.Name == "KnockbackForce" then
+				Child:Destroy()
+				print("Destroyed Knockback")
+			end
+		end)
+	end
+end
 
 UIS.InputBegan:Connect(function(input, isProcessed)
 	if isProcessed then return end
@@ -1019,18 +1313,19 @@ local function GetBestTarget()
 						BestTarget = TargetHRP
 						return BestTarget
 					else
-						if TargetHRP.Position.Y > -1 and TargetHRP.Position.Y < 150 then
-							local Distance = (HumRP.Position - TargetHRP.Position).Magnitude
+						if TargetHumanoid and TargetHumanoid.Health > 0 then
+							if TargetHRP.Position.Y > -1 and TargetHRP.Position.Y < 150 then
+								local Distance = (HumRP.Position - TargetHRP.Position).Magnitude
 
-							local Score = TargetHumanoid.Health * 5 + Distance
+								local Score = TargetHumanoid.Health * 5 + Distance
 
-							if Score < BestScore then
-								BestScore = Score
-								BestTarget = TargetHRP
+								if Score < BestScore then
+									BestScore = Score
+									BestTarget = TargetHRP
+								end
 							end
 						end
 					end
-
 				end
 			end
 		end
@@ -1079,22 +1374,28 @@ end
 
 -- Auto Kill
 task.spawn(function()
-	while task.wait(0.3) do
+	while task.wait(0.15) do
 		if AutoKillState and Humanoid.Health > 0 then
 			if HumRP.Position.Y >= 150 then
 				HumRP.CFrame = CFrame.new(0, 758.75, 29.5)
 				task.wait(1)
 			else
-				local TargetHRP: BasePart = GetBestTarget()
+				local TargetHRP = GetBestTarget()
 
-				if TargetHRP and TargetHRP:FindFirstChild("Humanoid") and TargetHRP:FindFirstChild("Humanoid").Health > 0 then
-					if TargetHRP.Position.Y < 150 and TargetHRP.Position.Y > -1 then
-						HumRP.CFrame = TargetHRP.CFrame * CFrame.new(0, -1, 5)
-						VIM:SendMouseButtonEvent(100, 200, 0, true, game, 0)
+				if TargetHRP then
+					local EnemyModel = TargetHRP.Parent
+					local EnemyHumanoid = EnemyModel:FindFirstChildOfClass("Humanoid")
+
+					if EnemyHumanoid and EnemyHumanoid.Health > 0 then
+						if TargetHRP.Position.Y < 150 and TargetHRP.Position.Y > -1 then
+							HumRP.CFrame = TargetHRP.CFrame * CFrame.new(0, -1, 5)
+
+							VIM:SendMouseButtonEvent(100, 200, 0, true, game, 0)
+						end
 					end
 				end
 			end
-		end	
+		end    
 	end
 end)
 
@@ -1173,43 +1474,47 @@ RNS.RenderStepped:Connect(function(DeltaTime)
 			Camera.CFrame = Camera.CFrame:Lerp(TargetCameraCFrame, DeltaTime * 10)
 		end
 	end
+	
+	if FastWalkState == true then
+		Humanoid.WalkSpeed = 29
+	end
 end)
 
-AutoKillSwitchButton.MouseButton1Click:Connect(function()
-	SwitcherSetup(AutoKillSwitchButton)
+AutoKillSwitchButton.Activated:Connect(function()
 	AutoKillState = not AutoKillState
 
-	if AutoKillState then
-		if AutoFarmState then
-			AutoFarmState = false
-			SwitcherSetup(AutoFarmSwitchButton)
-		end
+	if AutoKillState and AutoFarmState then
+		AutoFarmState = false
+		SwitcherSetup(AutoFarmSwitchButton)
+	end
 
+	SwitcherSetup(AutoKillSwitchButton)
+
+	if AutoKillState then
 		Notification("Notification", "Auto Kill", "Auto Kill: ON")
 	else
 		Notification("Notification", "Auto Kill", "Auto Kill: OFF")
 	end
 end)
 
-
-AutoFarmSwitchButton.MouseButton1Click:Connect(function()
-	SwitcherSetup(AutoFarmSwitchButton)
+AutoFarmSwitchButton.Activated:Connect(function()
 	AutoFarmState = not AutoFarmState
 
-	if AutoFarmState then
-		if AutoKillState then
-			AutoKillState = false
-			SwitcherSetup(AutoKillSwitchButton)
-		end
+	if AutoFarmState and AutoKillState then
+		AutoKillState = false
+		SwitcherSetup(AutoKillSwitchButton)
+	end
 
+	SwitcherSetup(AutoFarmSwitchButton)
+
+	if AutoFarmState then
 		Notification("Notification", "Auto Farm", "Auto Farm: ON")
 	else
 		Notification("Notification", "Auto Farm", "Auto Farm: OFF")
 	end
 end)
 
-
-AimAssistSwitchButton.MouseButton1Click:Connect(function()
+AimAssistSwitchButton.Activated:Connect(function()
 	SwitcherSetup(AimAssistSwitchButton)
 	AimAssistState = not AimAssistState
 
@@ -1220,7 +1525,58 @@ AimAssistSwitchButton.MouseButton1Click:Connect(function()
 	end
 end)
 
-WHColorButton.MouseButton1Click:Connect(function()
+AntiKnockbackSwitchButton.Activated:Connect(function()
+	SwitcherSetup(AntiKnockbackSwitchButton)
+	AntiKnockbackState = not AntiKnockbackState
+
+	if AntiKnockbackSwitchButton:GetAttribute("Switch") == true then
+		Notification("Notification", "Anti-Knockback", "Anti-Knockback: ON")
+	else
+		Notification("Notification", "Anti-Knockback", "Anti-Knockback: OFF")
+	end
+end)
+
+KnifeAutoBlockSwitchButton.Activated:Connect(function()
+	if Player:GetAttribute("Aspect") == "Knife" then
+		SwitcherSetup(KnifeAutoBlockSwitchButton)
+		KnifeAutoBlockState = not KnifeAutoBlockState
+
+		if KnifeAutoBlockSwitchButton:GetAttribute("Switch") == true then
+			Notification("Notification", "Knife Auto Block", "Knife Auto Block: ON\nThis is W.I.P future")
+		else
+			Notification("Notification", "Knife Auto Block", "Knife Auto Block: OFF")
+		end
+	else
+		SwitcherSetup(KnifeAutoBlockSwitchButton)
+		SwitcherSetup(KnifeAutoBlockSwitchButton)
+		
+		Notification("Notification", "Knife Auto Block", 'Choose "Knife" power to use it')
+	end
+end)
+
+FastWalkSwitchButton.Activated:Connect(function()
+	SwitcherSetup(FastWalkSwitchButton)
+	FastWalkState = not FastWalkState
+
+	if FastWalkSwitchButton:GetAttribute("Switch") == true then
+		Notification("Notification", "Fast Walk", "Fast Walk: ON\n Maximum walk speed 29")
+	else
+		Notification("Notification", "Fast Walk", "Fast Walk: OFF")
+	end
+end)
+
+AntiRagdollSwitchButton.Activated:Connect(function()
+	SwitcherSetup(AntiRagdollSwitchButton)
+	AntiRagdollState = not AntiRagdollState
+
+	if AntiRagdollSwitchButton:GetAttribute("Switch") == true then
+		Notification("Notification", "Anti-Ragdoll", "Anti-Ragdoll: ON")
+	else
+		Notification("Notification", "Anti-Ragdoll", "Anti-Ragdoll: OFF")
+	end
+end)
+
+WHColorButton.Activated:Connect(function()
 	if WHColorButton:GetAttribute("Active") == true then
 		WHColorButton:SetAttribute("Active", false)
 		WHColorChooseFrame.Visible = false
@@ -1230,7 +1586,7 @@ WHColorButton.MouseButton1Click:Connect(function()
 	end
 end)
 
-WHSwitchButton.MouseButton1Click:Connect(function()
+WHSwitchButton.Activated:Connect(function()
 	SwitcherSetup(WHSwitchButton)
 	if WHSwitchButton:GetAttribute("Switch") == true then
 
@@ -1256,7 +1612,7 @@ WHSwitchButton.MouseButton1Click:Connect(function()
 	end
 end)
 
-CloseButton.MouseButton1Click:Connect(function()
+CloseButton.Activated:Connect(function()
 	UiClose:Play()
 	CloseButton.Interactable = false
 	TS:Create(Background, TweenInfo.new(0.25, Enum.EasingStyle.Quad, Enum.EasingDirection.InOut), {Size = UDim2.new(0, 0, 0, 0)}):Play()
@@ -1269,7 +1625,7 @@ CloseButton.MouseButton1Click:Connect(function()
 	end)
 end)
 
-ButtonTag.MouseButton1Click:Connect(function()
+ButtonTag.Activated:Connect(function()
 	UiOpen:Play()
 	ButtonTag.Interactable = false
 	TS:Create(Background, TweenInfo.new(0.25, Enum.EasingStyle.Quad, Enum.EasingDirection.InOut), {Size = UDim2.new(0.277, 0, 0.282, 0)}):Play()
