@@ -3,7 +3,7 @@ local RNS = game:GetService("RunService")
 local Player = game:GetService("Players").LocalPlayer
 local PlayerGui = Player.PlayerGui
 local Character = Player.Character
-local HumRP = Character:WaitForChild("HumanoidRootPart")
+local HumRP: BasePart = Character:WaitForChild("HumanoidRootPart")
 local Humanoid: Humanoid = Character:WaitForChild("Humanoid")
 local Camera = workspace.CurrentCamera
 local UIS = game:GetService("UserInputService")
@@ -1208,7 +1208,7 @@ function Hitbox.Create(Size: Vector3, InstancePart: BasePart, Offset: CFrame, Li
 	Part.CanCollide = false
 	Part.CastShadow = false
 	Part.Parent = workspace
-	
+
 	if Visible == false then
 		Part.Transparency = 1
 	end
@@ -1404,7 +1404,7 @@ UIS.InputBegan:Connect(function(Input, isProcessed)
 	if Input.KeyCode == Enum.KeyCode.F then
 		if TPSwitchButton:GetAttribute("Switch") == true then
 			if Player:GetMouse().Target == nil then return end
-			
+
 			local TargetPosition = Player:GetMouse().Hit.Position + Vector3.new(0, 3, 0)
 			HumRP.CFrame = CFrame.new(TargetPosition)
 
@@ -1531,13 +1531,13 @@ end)
 
 -- Lichen Farm
 task.spawn(function()
-	while task.wait(0.3) do
+	while task.wait(0.2) do
 		if LichenFarmState and Humanoid.Health > 0 then
 			if HumRP.Position.Y >= 150 then
-				HumRP.CFrame = CFrame.new(0, 758.75, 29.5)
+				HumRP.CFrame = CFrame.new(0, 754.75, 29.5)
 				task.wait(1)
 			else
-				HumRP.CFrame = CFrame.new(-106.019196, 29.5238876, -123.054611)
+				HumRP.CFrame = CFrame.new(-106.019196, 29.5238876, -123.054611) * CFrame.Angles(0, math.rad(180), 0)
 				VIM:SendMouseButtonEvent(100, 200, 0, true, game, 0)
 			end
 		end    
@@ -1580,7 +1580,7 @@ task.spawn(function()
 				Humanoid.WalkToPoint = Vector3.new(0, 758.75, 29.5)
 			else
 				local PotentialTarget = GetNearestPlayer()
-				
+
 				if not LockedTarget or not LockedTarget.Parent or LockedTarget.Parent.Humanoid.Health <= 0 or (PotentialTarget and PotentialTarget ~= LockedTarget) then
 					LockedTarget = PotentialTarget
 				end
@@ -1643,7 +1643,7 @@ RNS.RenderStepped:Connect(function(DeltaTime)
 			Camera.CFrame = Camera.CFrame:Lerp(TargetCameraCFrame, DeltaTime * 10)
 		end
 	end
-	
+
 	if FastWalkState == true then
 		Humanoid.WalkSpeed = 29
 	end
@@ -1717,6 +1717,33 @@ LichenFarmSwitchButton.Activated:Connect(function()
 		SwitcherSetup(AutoFarmSwitchButton)
 	end
 
+	if HumRP:FindFirstChild("LichenWeld") then
+		HumRP:FindFirstChild("LichenWeld"):Destroy()
+	end
+
+	if not LichenFarmState then
+		local Structure = game:GetService("ReplicatedStorage"):FindFirstChild("DungeonCliff")
+		if Structure then
+			Structure.Parent = workspace.Map
+		end
+		
+		local AirPart = workspace:FindFirstChild("AirPart")
+		if AirPart then
+			AirPart:Destroy()
+		end
+	else
+		local AirPart = Instance.new("Part", workspace)
+		AirPart.Name = "AirPart"
+		AirPart.Anchored = true
+		AirPart.Size = Vector3.new(50, 1, 50)
+		AirPart.CFrame = CFrame.new(-106.019196, 26.5238876, -123.054611)
+
+		local Structure = workspace.Map:FindFirstChild("DungeonCliff")
+		if Structure then
+			Structure.Parent = game:GetService("ReplicatedStorage")
+		end
+	end
+
 	SwitcherSetup(LichenFarmSwitchButton)
 
 	if LichenFarmSwitchButton:GetAttribute("Switch") == true then
@@ -1761,7 +1788,7 @@ KnifeAutoBlockSwitchButton.Activated:Connect(function()
 	else
 		SwitcherSetup(KnifeAutoBlockSwitchButton)
 		SwitcherSetup(KnifeAutoBlockSwitchButton)
-		
+
 		Notification("Notification", "Knife Auto Block", 'Choose "Knife" power to use it')
 	end
 end)
