@@ -19,6 +19,8 @@ local AimAssistState = false
 local FastWalkState = false
 local AntiRagdollState = false
 local AntiKnockbackState = false
+local LichenFarmState = false
+local HitAuraState = false
 local AimAssistCD = false
 local WHColor = Color3.new(1, 0.388235, 0.388235)
 
@@ -501,6 +503,65 @@ KnifeAutoBlockBackgroundUICorner.CornerRadius = UDim.new(1, 0)
 KnifeAutoBlockBackgroundUICorner.Name = "KnifeAutoBlockBackgroundUICorner"
 KnifeAutoBlockBackgroundUICorner.Parent = KnifeAutoBlockBackground
 
+local HitAura = Instance.new("TextLabel")
+local HitAuraSwitchButton = Instance.new("TextButton")
+local HitAuraSwitchButtonUICorner = Instance.new("UICorner")
+local HitAuraUITextSizeConstraint = Instance.new("UITextSizeConstraint")
+local HitAuraBackground = Instance.new("Frame")
+local HitAuraBackgroundUICorner = Instance.new("UICorner")
+
+--Properties:
+
+HitAura.Name = "HitAura"
+HitAura.Parent = Combat
+HitAura.BackgroundColor3 = Color3.fromRGB(255, 255, 255)
+HitAura.BackgroundTransparency = 1.000
+HitAura.BorderColor3 = Color3.fromRGB(0, 0, 0)
+HitAura.BorderSizePixel = 0
+HitAura.Position = UDim2.new(0.529946148, 0, 0.668045223, 0)
+HitAura.Size = UDim2.new(0.214784697, 0, 0.171117067, 0)
+HitAura.ZIndex = 2
+HitAura.Font = Enum.Font.Oswald
+HitAura.Text = "Hit Aura (K)"
+HitAura.TextColor3 = Color3.fromRGB(139, 139, 139)
+HitAura.TextScaled = true
+HitAura.TextSize = 14.000
+HitAura.TextWrapped = true
+HitAura.TextXAlignment = Enum.TextXAlignment.Left
+
+HitAuraSwitchButton.Name = "HitAuraSwitchButton"
+HitAuraSwitchButton.Parent = HitAura
+HitAuraSwitchButton.BackgroundColor3 = Color3.fromRGB(139, 139, 139)
+HitAuraSwitchButton.BorderColor3 = Color3.fromRGB(0, 0, 0)
+HitAuraSwitchButton.BorderSizePixel = 0
+HitAuraSwitchButton.Position = UDim2.new(1.22538996, 0, 0.19466123, 0)
+HitAuraSwitchButton.Size = UDim2.new(0.293512404, 0, 0.805339217, 0)
+HitAuraSwitchButton.ZIndex = 2
+HitAuraSwitchButton.Font = Enum.Font.SourceSans
+HitAuraSwitchButton.Text = ""
+HitAuraSwitchButton.TextColor3 = Color3.fromRGB(0, 0, 0)
+HitAuraSwitchButton.TextSize = 14.000
+
+HitAuraSwitchButtonUICorner.CornerRadius = UDim.new(1, 0)
+HitAuraSwitchButtonUICorner.Name = "HitAuraSwitchButtonUICorner"
+HitAuraSwitchButtonUICorner.Parent = HitAuraSwitchButton
+
+HitAuraUITextSizeConstraint.Name = "HitAuraUITextSizeConstraint"
+HitAuraUITextSizeConstraint.Parent = HitAura
+HitAuraUITextSizeConstraint.MaxTextSize = 41
+
+HitAuraBackground.Name = "Background"
+HitAuraBackground.Parent = HitAura
+HitAuraBackground.BackgroundColor3 = Color3.fromRGB(17, 17, 17)
+HitAuraBackground.BorderColor3 = Color3.fromRGB(0, 0, 0)
+HitAuraBackground.BorderSizePixel = 0
+HitAuraBackground.Position = UDim2.new(1.29799902, 0, 0.194999263, 0)
+HitAuraBackground.Size = UDim2.new(0.477136731, 0, 0.805000663, 0)
+
+HitAuraBackgroundUICorner.CornerRadius = UDim.new(1, 0)
+HitAuraBackgroundUICorner.Name = "HitAuraBackgroundUICorner"
+HitAuraBackgroundUICorner.Parent = HitAuraBackground
+
 --# Movement
 
 local Movement = Instance.new("Frame")
@@ -750,6 +811,65 @@ AntiKnockbackBackground.Size = UDim2.new(0.477136731, 0, 0.805000663, 0)
 AntiKnockbackBackgroundUICorner.CornerRadius = UDim.new(1, 0)
 AntiKnockbackBackgroundUICorner.Name = "AntiKnockbackBackgroundUICorner"
 AntiKnockbackBackgroundUICorner.Parent = AntiKnockbackBackground
+
+local LichenFarm = Instance.new("TextLabel")
+local LichenFarmSwitchButton = Instance.new("TextButton")
+local LichenFarmSwitchButtonUICorner = Instance.new("UICorner")
+local LichenFarmUITextSizeConstraint = Instance.new("UITextSizeConstraint")
+local LichenFarmBackground = Instance.new("Frame")
+local AimAssistBackgroundUICorner = Instance.new("UICorner")
+
+--Properties:
+
+LichenFarm.Name = "LichenFarm"
+LichenFarm.Parent = Combat
+LichenFarm.BackgroundColor3 = Color3.fromRGB(255, 255, 255)
+LichenFarm.BackgroundTransparency = 1.000
+LichenFarm.BorderColor3 = Color3.fromRGB(0, 0, 0)
+LichenFarm.BorderSizePixel = 0
+LichenFarm.Position = UDim2.new(0.529946148, 0, 0.442309737, 0)
+LichenFarm.Size = UDim2.new(0.214784697, 0, 0.171117067, 0)
+LichenFarm.ZIndex = 2
+LichenFarm.Font = Enum.Font.Oswald
+LichenFarm.Text = "Lichen Farm"
+LichenFarm.TextColor3 = Color3.fromRGB(139, 139, 139)
+LichenFarm.TextScaled = true
+LichenFarm.TextSize = 14.000
+LichenFarm.TextWrapped = true
+LichenFarm.TextXAlignment = Enum.TextXAlignment.Left
+
+LichenFarmSwitchButton.Name = "LichenFarmSwitchButton"
+LichenFarmSwitchButton.Parent = LichenFarm
+LichenFarmSwitchButton.BackgroundColor3 = Color3.fromRGB(139, 139, 139)
+LichenFarmSwitchButton.BorderColor3 = Color3.fromRGB(0, 0, 0)
+LichenFarmSwitchButton.BorderSizePixel = 0
+LichenFarmSwitchButton.Position = UDim2.new(1.22538996, 0, 0.19466123, 0)
+LichenFarmSwitchButton.Size = UDim2.new(0.293512404, 0, 0.805339217, 0)
+LichenFarmSwitchButton.ZIndex = 2
+LichenFarmSwitchButton.Font = Enum.Font.SourceSans
+LichenFarmSwitchButton.Text = ""
+LichenFarmSwitchButton.TextColor3 = Color3.fromRGB(0, 0, 0)
+LichenFarmSwitchButton.TextSize = 14.000
+
+LichenFarmSwitchButtonUICorner.CornerRadius = UDim.new(1, 0)
+LichenFarmSwitchButtonUICorner.Name = "LichenFarmSwitchButtonUICorner"
+LichenFarmSwitchButtonUICorner.Parent = LichenFarmSwitchButton
+
+LichenFarmUITextSizeConstraint.Name = "LichenFarmUITextSizeConstraint"
+LichenFarmUITextSizeConstraint.Parent = LichenFarm
+LichenFarmUITextSizeConstraint.MaxTextSize = 41
+
+LichenFarmBackground.Name = "Background"
+LichenFarmBackground.Parent = LichenFarm
+LichenFarmBackground.BackgroundColor3 = Color3.fromRGB(17, 17, 17)
+LichenFarmBackground.BorderColor3 = Color3.fromRGB(0, 0, 0)
+LichenFarmBackground.BorderSizePixel = 0
+LichenFarmBackground.Position = UDim2.new(1.29799902, 0, 0.194999263, 0)
+LichenFarmBackground.Size = UDim2.new(0.477136731, 0, 0.805000663, 0)
+
+AimAssistBackgroundUICorner.CornerRadius = UDim.new(1, 0)
+AimAssistBackgroundUICorner.Name = "AimAssistBackgroundUICorner"
+AimAssistBackgroundUICorner.Parent = LichenFarmBackground
 
 --# Visuals
 
@@ -1175,6 +1295,7 @@ UIS.InputBegan:Connect(function(Input, GameProcessed)
 	end
 end)
 
+
 WHTextBox:GetPropertyChangedSignal("Text"):Connect(function()
 	local color = hexToColor3(WHTextBox.Text)
 	if color then
@@ -1277,10 +1398,10 @@ if AntiRagdollState then
 	end
 end
 
-UIS.InputBegan:Connect(function(input, isProcessed)
+UIS.InputBegan:Connect(function(Input, isProcessed)
 	if isProcessed then return end
 
-	if input.KeyCode == Enum.KeyCode.F then
+	if Input.KeyCode == Enum.KeyCode.F then
 		if TPSwitchButton:GetAttribute("Switch") == true then
 			if Player:GetMouse().Target == nil then return end
 			
@@ -1288,6 +1409,15 @@ UIS.InputBegan:Connect(function(input, isProcessed)
 			HumRP.CFrame = CFrame.new(TargetPosition)
 
 			UiNotificator:Play()
+		end
+	elseif Input.KeyCode == Enum.KeyCode.K then
+		HitAuraState = not HitAuraState
+		SwitcherSetup(HitAuraSwitchButton)
+
+		if HitAuraSwitchButton:GetAttribute("Switch") == true then
+			Notification("Notification", "Hit Aura", "Hit Aura: ON")
+		else
+			Notification("Notification", "Hit Aura", "Hit Aura: OFF")
 		end
 	end
 end)
@@ -1399,6 +1529,45 @@ task.spawn(function()
 	end
 end)
 
+-- Lichen Farm
+task.spawn(function()
+	while task.wait(0.3) do
+		if LichenFarmState and Humanoid.Health > 0 then
+			if HumRP.Position.Y >= 150 then
+				HumRP.CFrame = CFrame.new(0, 758.75, 29.5)
+				task.wait(1)
+			else
+				HumRP.CFrame = CFrame.new(-106.019196, 29.5238876, -123.054611)
+				VIM:SendMouseButtonEvent(100, 200, 0, true, game, 0)
+			end
+		end    
+	end
+end)
+
+-- Hit Aura
+task.spawn(function()
+	while task.wait(0.15) do
+		if HitAuraState == true then
+			if HumRP.Position.Y < 150 then
+				local HB = Hitbox.Create(Vector3.new(30, 30, 30), HumRP, CFrame.new(0, 0, -6), 0.05, true)
+
+				Hitbox.OnTouched(HB, function(EnemyCharacter: Model, EnemyHumanoid: Humanoid)
+					local EnemyHRP = EnemyCharacter:FindFirstChild("HumanoidRootPart")
+					if not EnemyHRP then return end
+					if EnemyHumanoid.Health <= 0 then return end
+
+					VIM:SendMouseButtonEvent(100, 200, 0, true, game, 0)
+
+					task.delay(0.2, function()
+						VIM:SendMouseButtonEvent(100, 200, 0, false, game, 0)
+					end)
+				end)
+			end
+		end
+	end
+end)
+
+
 -- Auto Farm
 local LastPathCompute = 0
 local FarmWaypoints = {}
@@ -1488,6 +1657,11 @@ AutoKillSwitchButton.Activated:Connect(function()
 		SwitcherSetup(AutoFarmSwitchButton)
 	end
 
+	if AutoKillState and LichenFarmState then
+		LichenFarmState = false
+		SwitcherSetup(LichenFarmSwitchButton)
+	end
+
 	SwitcherSetup(AutoKillSwitchButton)
 
 	if AutoKillState then
@@ -1503,6 +1677,11 @@ AutoFarmSwitchButton.Activated:Connect(function()
 	if AutoFarmState and AutoKillState then
 		AutoKillState = false
 		SwitcherSetup(AutoKillSwitchButton)
+	end
+
+	if AutoFarmState and LichenFarmState then
+		LichenFarmState = false
+		SwitcherSetup(LichenFarmSwitchButton)
 	end
 
 	SwitcherSetup(AutoFarmSwitchButton)
@@ -1522,6 +1701,39 @@ AimAssistSwitchButton.Activated:Connect(function()
 		Notification("Notification", "Aim Assist", "Aim Assist: ON")
 	else
 		Notification("Notification", "Aim Assist", "Aim Assist: OFF")
+	end
+end)
+
+LichenFarmSwitchButton.Activated:Connect(function()
+	LichenFarmState = not LichenFarmState
+
+	if LichenFarmState and AutoKillState then
+		AutoKillState = false
+		SwitcherSetup(AutoKillSwitchButton)
+	end
+
+	if LichenFarmState and AutoFarmState then
+		AutoFarmState = false
+		SwitcherSetup(AutoFarmSwitchButton)
+	end
+
+	SwitcherSetup(LichenFarmSwitchButton)
+
+	if LichenFarmSwitchButton:GetAttribute("Switch") == true then
+		Notification("Notification", "Lichen Farm", "Lichen Farm: ON")
+	else
+		Notification("Notification", "Lichen Farm", "Lichen Farm: OFF")
+	end
+end)
+
+HitAuraSwitchButton.Activated:Connect(function()
+	HitAuraState = not HitAuraState
+	SwitcherSetup(HitAuraSwitchButton)
+
+	if HitAuraSwitchButton:GetAttribute("Switch") == true then
+		Notification("Notification", "Hit Aura", "Hit Aura: ON")
+	else
+		Notification("Notification", "Hit Aura", "Hit Aura: OFF")
 	end
 end)
 
