@@ -638,7 +638,7 @@ DiscordButton.MouseButton1Click:Connect(function()
 	setclipboard("https://discord.gg/QFmv5wy6b3")
 end)
 
-local MainScriptUrl = "ТВОЯ_RAW_ССЫЛКА_НА_ОСНОВНОЙ_СКРИПТ"
+local MainScriptUrl = "https://raw.githubusercontent.com/DeVerGoose/CYP-Script-New-Gen/refs/heads/main/CYP-NEW_GEN-Script"
 
 EnterButton.MouseButton1Click:Connect(function()
 	local Key = EnterBox.Text
