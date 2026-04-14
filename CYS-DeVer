@@ -24,6 +24,8 @@ local HitAuraState = false
 local AimAssistCD = false
 local WHColor = Color3.new(1, 0.388235, 0.388235)
 
+if Player:GetAttribute("ValidOrbitKey") ~= true then return end
+
 local States: Folder = Character:WaitForChild("States")
 
 -- // Gui \\ --
@@ -1726,7 +1728,7 @@ LichenFarmSwitchButton.Activated:Connect(function()
 		if Structure then
 			Structure.Parent = workspace.Map
 		end
-		
+
 		local AirPart = workspace:FindFirstChild("AirPart")
 		if AirPart then
 			AirPart:Destroy()
