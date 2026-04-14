@@ -636,6 +636,12 @@ end
 
 DiscordButton.MouseButton1Click:Connect(function()
 	setclipboard("https://discord.gg/QFmv5wy6b3")
+	
+	StarterGui:SetCore("SendNotification", {
+		Title = "Discord",
+		Text = "Link copied",
+		Duration = 5
+	})
 end)
 
 local MainScriptUrl = "https://raw.githubusercontent.com/DeVerGoose/CYP-Script-New-Gen/refs/heads/main/CYP-NEW_GEN-Script"
